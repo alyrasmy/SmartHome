@@ -10,7 +10,7 @@ public class User {
 	private String password;
 	private String email;
 	private boolean isAdmin;
-	private Room house;
+	private Room mainRoom;
 	private List<Room> rooms;
 	
 	public User () {
@@ -20,18 +20,18 @@ public class User {
 		password = null;
 		email = null;
 		isAdmin = false;
-		house = null;
+		mainRoom = null;
 		rooms = new ArrayList<Room>();
 	}
 	
-	public User ( String id, String name, String username, String password, String email, boolean isAdmin, Room house, List<Room> rooms) {
+	public User ( String id, String name, String username, String password, String email, boolean isAdmin, Room mainRoom, List<Room> rooms) {
 		this.id = id;
 		this.name = name;
 		this.username = username;
 		this.password = password;
 		this.email = email;
 		this.isAdmin = isAdmin;
-		this.house = house;
+		this.mainRoom = mainRoom;
 		this.rooms = rooms;
 	}
 
@@ -83,12 +83,12 @@ public class User {
 		this.isAdmin = isAdmin;
 	}
 
-	public Room getHouse() {
-		return house;
+	public Room getMainRoom() {
+		return mainRoom;
 	}
 
-	public void setHouse(Room house) {
-		this.house = house;
+	public void setmainRoom(Room mainRoom) {
+		this.mainRoom = mainRoom;
 	}
 
 	public List<Room> getRooms() {

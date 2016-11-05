@@ -1,6 +1,6 @@
 package com.smarthome.model;
 
-public class Led {
+public class Led implements Comparable<Led> {
 	private String time;
 	private String value;
 	
@@ -28,5 +28,10 @@ public class Led {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	@Override
+	public int compareTo(Led o) {
+		return getTime().compareTo(o.getTime());
 	}
 }

@@ -1,6 +1,6 @@
 package com.smarthome.model;
 
-public class Temperature {
+public class Temperature implements Comparable<Temperature> {
 	private String time;
 	private String value;
 	
@@ -28,5 +28,10 @@ public class Temperature {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	@Override
+	public int compareTo(Temperature o) {
+		return getTime().compareTo(o.getTime());
 	}
 }

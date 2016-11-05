@@ -7,11 +7,14 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -24,6 +27,8 @@ import javax.ws.rs.core.StreamingOutput;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonWriter;
+import com.smarthome.dao.DAOException;
+import com.smarthome.dao.JDBCSmartHomeDAO;
 import com.smarthome.dao.SmartHomeDAO;
 import com.smarthome.model.Humidity;
 import com.smarthome.model.Led;
@@ -31,16 +36,36 @@ import com.smarthome.model.Room;
 //import com.smarthome.dao.SmartHomeDAO;
 import com.smarthome.model.Temperature;
 import com.smarthome.model.User;
+import com.smarthome.schedule.HumiditySchedule;
+import com.smarthome.schedule.LedSchedule;
+import com.smarthome.schedule.TemperatureSchedule;
+import com.smarthome.service.SmartHomeService_V1;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 @Path("/api/smarthome")
 public class SmartHomeRESTService {
 	
 	private final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
-	private SmartHomeDAO smarthomeDAO;
+	private BasicDataSource basicDataSource;
+	private SmartHomeService_V1 smartHomeService;
+    private SmartHomeDAO smartHomeDAO;
+	private TemperatureSchedule temperatureSchedule;
+	private HumiditySchedule humiditySchedule;
+	private LedSchedule ledSchedule;
 
-	public SmartHomeRESTService(SmartHomeDAO smarthomeDAO)
+	public SmartHomeRESTService()
 	{
-		this.smarthomeDAO = smarthomeDAO;
+		basicDataSource = new BasicDataSource();
+		basicDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		basicDataSource.setUsername("team");
+		basicDataSource.setPassword("password");
+		basicDataSource.setUrl("jdbc:mysql://localhost/SmartHome?autoReconnect=true");
+		smartHomeDAO = new JDBCSmartHomeDAO(basicDataSource);
+		smartHomeService = new SmartHomeService_V1();
+		temperatureSchedule = new TemperatureSchedule(smartHomeService, smartHomeDAO);
+		humiditySchedule = new HumiditySchedule(smartHomeService, smartHomeDAO);
+		ledSchedule = new LedSchedule(smartHomeService, smartHomeDAO);
 	}
 	
 	@GET
@@ -56,19 +81,17 @@ public class SmartHomeRESTService {
 	@GET
 	@Path("/temperature")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getTemperature(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate)
+	public Response getTemperature(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws SQLException
 	{
 		try {
 			if(startDate != null && endDate != null) // get all temperature record in the database between these 2 dates
 			{
 				List<Temperature> temperatureCollection = new ArrayList<Temperature>();
-				temperatureCollection.add(new Temperature("23-11-16","45"));
-				//temperatureCollection = (List<Temperature>) smarthomeDAO.getTemperature(startDate,endDate);
+				temperatureCollection = (List<Temperature>) smartHomeDAO.getTemperature(startDate,endDate);
 				return Response.ok().entity(convertTemperatureToJSON(temperatureCollection)).build();
 			} else { // get all temperature record in the database
 				List<Temperature> temperatureCollection = new ArrayList<Temperature>();
-				temperatureCollection.add(new Temperature("23-11-16","45"));
-				//temperatureCollection = (List<Temperature>) smarthomeDAO.getAllTemperature();
+				temperatureCollection = (List<Temperature>) smartHomeDAO.getAllTemperature();
 				return Response.ok().entity(convertTemperatureToJSON(temperatureCollection)).build();
 			}
 		} catch(RuntimeException e){
@@ -81,19 +104,17 @@ public class SmartHomeRESTService {
 	@GET
 	@Path("/humidity")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getHumidity(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate)
+	public Response getHumidity(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws SQLException
 	{
 		try {
 			if(startDate != null && endDate != null) // get all humidity record in the database between these 2 dates
 			{
 				List<Humidity> humidityCollection = new ArrayList<Humidity>();
-				humidityCollection.add(new Humidity("23-11-16","45"));
-				//humidityCollection = (List<Humidity>) smarthomeDAO.getHumidity(startDate,endDate);
+				humidityCollection = (List<Humidity>) smartHomeDAO.getHumidity(startDate,endDate);
 				return Response.ok().entity(convertHumidityToJSON(humidityCollection)).build();
 			} else { // get all humidity record in the database
 				List<Humidity> humidityCollection = new ArrayList<Humidity>();
-				humidityCollection.add(new Humidity("23-11-16","45"));
-				//humidityCollection = (List<Humidity>) smarthomeDAO.getAllHumidity();
+				humidityCollection = (List<Humidity>) smartHomeDAO.getAllHumidity();
 				return Response.ok().entity(convertHumidityToJSON(humidityCollection)).build();
 			}
 		} catch(RuntimeException e){
@@ -106,19 +127,17 @@ public class SmartHomeRESTService {
 	@GET
 	@Path("/led")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getLedUsage(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate)
+	public Response getLedUsage(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws SQLException
 	{
 		try {
 			if(startDate != null && endDate != null) // get all led usage record in the database between these 2 dates
 			{
 				List<Led> ledUsageCollection = new ArrayList<Led>();
-				ledUsageCollection.add(new Led("23-11-16","45"));
-				//ledUsageCollection = (List<Led>) smarthomeDAO.getLedUsage(startDate,endDate);
+				ledUsageCollection = (List<Led>) smartHomeDAO.getLedUsage(startDate,endDate);
 				return Response.ok().entity(convertLedUsageToJSON(ledUsageCollection)).build();
 			} else { // get all led usage record in the database
 				List<Led> ledUsageCollection = new ArrayList<Led>();
-				ledUsageCollection.add(new Led("23-11-16","45"));
-				//ledUsageCollection = (List<Led>) smarthomeDAO.getAllLedUsage();
+				ledUsageCollection = (List<Led>) smartHomeDAO.getAllLedUsage();
 				return Response.ok().entity(convertLedUsageToJSON(ledUsageCollection)).build();
 			}
 		} catch(RuntimeException e){
@@ -136,14 +155,89 @@ public class SmartHomeRESTService {
 		try {
 			List<User> usersCollection = new ArrayList<User>();
 			//User user = new User(sdsdsdsd);
-			User user = smarthomeDAO.getUser(userId);
+			User user = smartHomeDAO.getUser(userId);
 			usersCollection.add(user);
 			return Response.ok().entity(convertUserToJSON(usersCollection, true)).build();
 		} catch(RuntimeException e){
 			e.printStackTrace();
 			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
 		}
 	}
+	
+	@POST
+	@Path("/job/temperature/{action}")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getTemperatureJobStatus(@PathParam("action") String action)
+	{
+		//start the job
+		if(action.equals("start"))
+		{
+			temperatureSchedule.run(); //run the job
+			return Response.ok().entity("Ran the temperature job schedule successfully").build();
+		}else{
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported action").build();
+		}
+	}
+	
+	@POST
+	@Path("/job/humidity/{action}")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getHumidityJobStatus(@PathParam("action") String action)
+	{
+		//start the job
+		if(action.equals("start"))
+		{
+			humiditySchedule.run(); //run the job
+			return Response.ok().entity("Ran the humidity job schedule successfully").build();
+		}else{
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported action").build();
+		}
+	}
+	
+	@POST
+	@Path("/job/led/{action}")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getLedJobStatus(@PathParam("action") String action)
+	{
+		//start the job
+		if(action.equals("start"))
+		{
+			ledSchedule.run(); //run the job
+			return Response.ok().entity("Ran the led job schedule successfully").build();
+		}else{
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported action").build();
+		}
+	}
+	
+	@POST
+	@Path("/user/create")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response addUser(String requestBody) throws DAOException, NumberFormatException, IOException, InterruptedException, ExecutionException, SQLException{
+		return null;
+//		String name = requestBody.split("name:")[1].split(",")[0];
+//		String password = requestBody.split("password:")[1].split(",")[0];
+//		String email = requestBody.split("email:")[1].split(",")[0];
+//		String mainRoom = requestBody.split("mainroom:")[1].split(",")[0];
+//		User user = new User();
+//		user.setName(name);
+//		user.setEmail(email);
+//		user.setPassword(password);
+//		user.set
+//		if (!teamDAO.teamExists(boardId))
+//		{
+//			ArrayList<Team> teams= new ArrayList<Team>();
+//			Team team = teamService.getTeam(Integer.parseInt(boardId), teamName); //get epics using the epic service
+//			teams.add(team);
+//			teamDAO.createTeams(teams);
+//			return Response.ok().entity("Added the team successfully").build();
+//		}
+//		else{
+//			return Response.ok().entity("Team Already exists in database").build();
+//			
+		}
 	
 	private StreamingOutput convertTemperatureToJSON(final List<Temperature> temperatureCollection)
 	{
@@ -339,7 +433,7 @@ public class SmartHomeRESTService {
 
 					jsonWriter.beginObject(); //begin wrapper object
 					jsonWriter.name("type").value("room");
-					jsonWriter.name("id").value(user.getHouse().getId());
+					jsonWriter.name("id").value(user.getMainRoom().getId());
 					jsonWriter.endObject(); //end wrapper object
 						
 					jsonWriter.endArray(); //end the house relationship data
@@ -375,14 +469,14 @@ public class SmartHomeRESTService {
 					User user= new User();
 					user = usersCollection.get(i);
 					
-					if(user.getHouse() != null)
+					if(user.getMainRoom() != null)
 					{
 						jsonWriter.beginObject(); //begin wrapper object
 						jsonWriter.name("type").value("room");
-						jsonWriter.name("id").value(user.getHouse().getId());
+						jsonWriter.name("id").value(user.getMainRoom().getId());
 						jsonWriter.name("attributes");
 						jsonWriter.beginObject(); //begin attributes object
-						jsonWriter.name("name").value(user.getHouse().getRoomName());
+						jsonWriter.name("name").value(user.getMainRoom().getRoomName());
 						jsonWriter.endObject(); //end attributes object
 						jsonWriter.endObject(); //end wrapper object
 					}

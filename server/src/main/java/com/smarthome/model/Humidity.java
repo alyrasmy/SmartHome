@@ -1,6 +1,6 @@
 package com.smarthome.model;
 
-public class Humidity {
+public class Humidity implements Comparable<Humidity> {
 	private String time;
 	private String value;
 	
@@ -28,5 +28,10 @@ public class Humidity {
 
 	public void setValue(String value) {
 		this.value = value;
+	}
+
+	@Override
+	public int compareTo(Humidity o) {
+		return getTime().compareTo(o.getTime());
 	}
 }
