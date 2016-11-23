@@ -194,7 +194,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 		if(recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL)) {
 			roomId = getRoomId(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL);
 			Statement temperatureStatement = connection.createStatement();
-			String query = "SELECT * FROM temperature where board_id=" + roomId + "AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
+			String query = "SELECT * FROM temperature where board_id=" + roomId + " AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
 			ResultSet temperatureResultSet = temperatureStatement.executeQuery(query);
 			while (temperatureResultSet.next()) {
 				Temperature temperature =  new Temperature();
@@ -262,7 +262,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 		if(recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL)) {
 			roomId = getRoomId(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL);
 			Statement humidityStatement = connection.createStatement();
-			String query = "SELECT * FROM humidity where board_id=" + roomId + "AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
+			String query = "SELECT * FROM humidity where board_id=" + roomId + " AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
 			ResultSet humidityResultSet = humidityStatement.executeQuery(query);
 			while (humidityResultSet.next()) {
 				Humidity humidity =  new Humidity();
@@ -330,7 +330,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 		if(recordExists(connection,sparkCoreId,GET_ROOM_SQL)) {
 			roomId = getRoomId(connection,sparkCoreId,GET_ROOM_SQL);
 			Statement ledStatement = connection.createStatement();
-			String query = "SELECT * FROM led where board_id=" + roomId + "AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
+			String query = "SELECT * FROM led where board_id=" + roomId + " AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
 			ResultSet ledResultSet = ledStatement.executeQuery(query);
 
 			while (ledResultSet.next()) {
