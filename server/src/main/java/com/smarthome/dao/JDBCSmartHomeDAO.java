@@ -189,19 +189,23 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 
 	@Override
 	public List<Temperature> getTemperature(String startDate, String endDate) throws SQLException {
-		Statement temperatureStatement = connection.createStatement();
-		String query = "SELECT * FROM temperature where timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
-		ResultSet temperatureResultSet = temperatureStatement.executeQuery(query);
+		int roomId;
 		List<Temperature> temperatures = new ArrayList<Temperature>();
-		while (temperatureResultSet.next()) {
-			Temperature temperature =  new Temperature();
-			Timestamp timestamp= temperatureResultSet.getTimestamp("timestamp");
-			String value = temperatureResultSet.getString("temperature_value");
-			temperature.setValue(value);
-			temperature.setTime(timestamp.toString());
-			temperatures.add(temperature);
+		if(recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL)) {
+			roomId = getRoomId(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL);
+			Statement temperatureStatement = connection.createStatement();
+			String query = "SELECT * FROM temperature where board_id=" + roomId + "AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
+			ResultSet temperatureResultSet = temperatureStatement.executeQuery(query);
+			while (temperatureResultSet.next()) {
+				Temperature temperature =  new Temperature();
+				Timestamp timestamp= temperatureResultSet.getTimestamp("timestamp");
+				String value = temperatureResultSet.getString("temperature_value");
+				temperature.setValue(value);
+				temperature.setTime(timestamp.toString());
+				temperatures.add(temperature);
+			}
+			Collections.sort(temperatures);
 		}
-		Collections.sort(temperatures);
 		return temperatures;
 	}
 
@@ -253,19 +257,23 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 
 	@Override
 	public Collection<Humidity> getHumidity(String startDate, String endDate) throws SQLException {
-		Statement humidityStatement = connection.createStatement();
-		String query = "SELECT * FROM humidity where timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
-		ResultSet humidityResultSet = humidityStatement.executeQuery(query);
 		List<Humidity> humidities = new ArrayList<Humidity>();
-		while (humidityResultSet.next()) {
-			Humidity humidity =  new Humidity();
-			Timestamp timestamp= humidityResultSet.getTimestamp("timestamp");
-			String value = humidityResultSet.getString("humidity_value");
-			humidity.setValue(value);
-			humidity.setTime(timestamp.toString());
-			humidities.add(humidity);
+		int roomId;
+		if(recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL)) {
+			roomId = getRoomId(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL);
+			Statement humidityStatement = connection.createStatement();
+			String query = "SELECT * FROM humidity where board_id=" + roomId + "AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
+			ResultSet humidityResultSet = humidityStatement.executeQuery(query);
+			while (humidityResultSet.next()) {
+				Humidity humidity =  new Humidity();
+				Timestamp timestamp= humidityResultSet.getTimestamp("timestamp");
+				String value = humidityResultSet.getString("humidity_value");
+				humidity.setValue(value);
+				humidity.setTime(timestamp.toString());
+				humidities.add(humidity);
+			}
+			Collections.sort(humidities);
 		}
-		Collections.sort(humidities);
 		return humidities;
 	}
 
@@ -316,20 +324,25 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	}
 
 	@Override
-	public Collection<Led> getLedUsage(String startDate, String endDate) throws SQLException {
-		Statement ledStatement = connection.createStatement();
-		String query = "SELECT * FROM led where timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
-		ResultSet ledResultSet = ledStatement.executeQuery(query);
+	public Collection<Led> getLedUsage(String startDate, String endDate, String sparkCoreId) throws SQLException {
+		int roomId;
 		List<Led> leds = new ArrayList<Led>();
-		while (ledResultSet.next()) {
-			Led led =  new Led();
-			Timestamp timestamp= ledResultSet.getTimestamp("timestamp");
-			String value = ledResultSet.getString("led_usage");
-			led.setValue(value);
-			led.setTime(timestamp.toString());
-			leds.add(led);
+		if(recordExists(connection,sparkCoreId,GET_ROOM_SQL)) {
+			roomId = getRoomId(connection,sparkCoreId,GET_ROOM_SQL);
+			Statement ledStatement = connection.createStatement();
+			String query = "SELECT * FROM led where board_id=" + roomId + "AND " + "timestamp BETWEEN '" + startDate + " 00:00:01' AND '" + endDate + " 23:59:59'";
+			ResultSet ledResultSet = ledStatement.executeQuery(query);
+
+			while (ledResultSet.next()) {
+				Led led =  new Led();
+				Timestamp timestamp= ledResultSet.getTimestamp("timestamp");
+				String value = ledResultSet.getString("led_usage");
+				led.setValue(value);
+				led.setTime(timestamp.toString());
+				leds.add(led);
+			}
+			Collections.sort(leds);
 		}
-		Collections.sort(leds);
 		return leds;
 	}
 

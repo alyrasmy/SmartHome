@@ -127,13 +127,13 @@ public class SmartHomeRESTService {
 	@GET
 	@Path("/led")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response getLedUsage(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws SQLException
+	public Response getLedUsage(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("boardId") String boardId) throws SQLException
 	{
 		try {
 			if(startDate != null && endDate != null) // get all led usage record in the database between these 2 dates
 			{
 				List<Led> ledUsageCollection = new ArrayList<Led>();
-				ledUsageCollection = (List<Led>) smartHomeDAO.getLedUsage(startDate,endDate);
+				ledUsageCollection = (List<Led>) smartHomeDAO.getLedUsage(startDate,endDate,boardId);
 				return Response.ok().entity(convertLedUsageToJSON(ledUsageCollection)).build();
 			} else { // get all led usage record in the database
 				List<Led> ledUsageCollection = new ArrayList<Led>();
@@ -154,7 +154,6 @@ public class SmartHomeRESTService {
 	{
 		try {
 			List<User> usersCollection = new ArrayList<User>();
-			//User user = new User(sdsdsdsd);
 			User user = smartHomeDAO.getUser(userId);
 			usersCollection.add(user);
 			return Response.ok().entity(convertUserToJSON(usersCollection, true)).build();
