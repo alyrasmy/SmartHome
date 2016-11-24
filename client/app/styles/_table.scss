@@ -1,0 +1,28 @@
+.mui-table {
+  width        : 100%;
+  max-width    : 100%;
+  margin-bottom: 20px;
+}
+
+.mui-table>tbody>tr>td,
+.mui-table>tbody>tr>th,
+.mui-table>tfoot>tr>td,
+.mui-table>tfoot>tr>th,
+.mui-table>thead>tr>td,
+.mui-table>thead>tr>th {
+  padding    : 10px;
+  line-height: 1.429;
+}
+
+.mui-table>thead>tr>th {
+  border-bottom: 2px solid rgba(0,0,0,.12);
+  font-weight  : 700;
+}
+
+.mui-table>tbody+tbody {
+  border-top: 2px solid rgba(0,0,0,.12);
+}
+
+.mui-table.mui-table--bordered>tbody>tr>td {
+  border-bottom: 1px solid rgba(0,0,0,.12);
+}

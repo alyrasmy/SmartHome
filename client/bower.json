@@ -1,0 +1,32 @@
+{
+  "name": "client",
+  "dependencies": {
+    "Chart.js": "~1.0.2",
+    "Faker": "~3.0.0",
+    "antiscroll": "git://github.com/Addepar/antiscroll#e0d1538cf4f3fd61c5bedd6168df86d651f125da",
+    "bourbon": "~4.2.3",
+    "chartjs": "1.0.2",
+    "d3": "~3.5.6",
+    "ember": "1.13.7",
+    "ember-cli-shims": "ember-cli/ember-cli-shims#0.0.3",
+    "ember-cli-test-loader": "ember-cli-test-loader#0.1.3",
+    "ember-data": "1.13.8",
+    "ember-load-initializers": "ember-cli/ember-load-initializers#0.1.5",
+    "ember-qunit": "0.4.9",
+    "ember-qunit-notifications": "0.0.7",
+    "ember-resolver": "~0.1.18",
+    "hammerjs": "~2.0.4",
+    "jquery": "^2.1.4",
+    "jquery-mousewheel": "~3.1.4",
+    "jquery-ui": "~1.11.4",
+    "loader.js": "ember-cli/loader.js#3.2.1",
+    "lodash": "~3.7.0",
+    "matchMedia": "0.2.0",
+    "moment": ">= 2.8.0",
+    "moment-timezone": ">= 0.1.0",
+    "pretender": "~0.9.0",
+    "qunit": "~1.18.0",
+    "bootstrap": "~3.3.5",
+    "materialize": "~0.97.0"
+  }
+}

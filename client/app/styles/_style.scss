@@ -1,0 +1,115 @@
+html,
+body {
+  margin: 0;
+  height: 100%;
+  background-image: url('assets/background1.jpg');
+}
+
+body > .ember-view,
+.paper-nav-container {
+  height: 100%;
+  background-image: url('assets/background1.jpg');
+}
+
+.breadcrumb {
+  list-style  : none;
+  overflow    : hidden;
+  padding-left: 0;
+}
+
+.breadcrumb li {
+  float       : left;
+  padding-left: 5px;
+}
+
+.team-summary-card {
+  float     : left;
+  max-width : 275px;
+  min-width : 275px;
+  min-height: 350px;
+  text-align: center;
+
+  .card-content {
+    white-space: nowrap;
+    /* Firefox */
+    overflow-x : hidden;
+  }
+}
+
+.team-link {
+  color          : #000;
+  text-decoration: none;
+}
+
+.circle {
+  width        : 60px;
+  height       : 60px;
+  border-radius: 50%;
+  font-size    : 20px;
+  color        : #fff;
+  line-height  : 60px;
+  text-align   : center;
+  background   : #005582;
+}
+
+.redbox {
+  border          : solid 1px #e52c2c;
+  background-color: #e52c2c;
+  display         : table;
+  padding         : 4px;
+  margin          : 4px 4px 0;
+}
+
+.greenbox {
+  border          : solid 1px #00aa3e;
+  background-color: #00aa3e;
+  display         : table;
+  padding         : 4px;
+  margin          : 4px 4px 0;
+}
+.no-overflow-x {
+  overflow-x: hidden;
+}
+
+.redfont {
+  color: #FF0000;
+}
+
+.blackfont {
+  color: #000000;
+}
+
+.greenfont {
+  color: #00FF00;
+}
+
+a.boxclose{
+    position: absolute;
+    float:right;
+    margin-top:0px;
+    margin-right:0px;
+    cursor:pointer;
+    color: #fff;
+    border: 1px solid #AEAEAE;
+    border-radius: 30px;
+    background: #ff0000;
+    font-size: 31px;
+    font-weight: bold;
+    display: inline-block;
+    line-height: 0px;
+    padding: 11px 3px;
+}
+
+.boxclose:before {
+    content: "X";
+}
+
+.login {
+  position: absolute;
+  width: 50%;
+  z-index: 15;
+  top: 30%;
+  left: 35%;
+  margin: -100px 0 0 -150px;
+  background-color:white;
+}

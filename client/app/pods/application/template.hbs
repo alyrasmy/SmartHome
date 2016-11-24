@@ -1,0 +1,86 @@
+<html>
+<body style="background-image: url('assets/background1.jpg');">
+      {{#if session.isAuthenticated}}
+        {{#paper-nav-container class="site-nav-container"}}
+            {{#paper-sidenav class="md-sidenav-left md-whiteframe-z2 site-sidenav" locked-open="gt-md" }}
+              {{#paper-toolbar class="site-content-toolbar"}}
+                <div class="md-toolbar-tools">
+                  <div class="logo">
+                    <img src="assets/Logo.png" alt="Logo" style="width:200px;height:50px;">
+                  </div>
+                </div>
+              {{/paper-toolbar}}
+              {{#paper-content}}
+                {{#paper-list}}
+                  {{#each routes as |item|}}
+                    {{#paper-item action="transitionTo" param=item}}
+                      {{paper-icon icon=item.icon size="lg"}}
+                      {{item.alias}}
+                    {{/paper-item}}
+                  {{/each}}
+                {{/paper-list}}
+              {{/paper-content}}
+            {{/paper-sidenav}}
+
+            <div layout="column" tabindex="-1" role="main" flex>
+              {{#paper-toolbar}}
+
+                <div class="md-toolbar-tools">
+                  {{#paper-sidenav-toggle as |toggle| }}
+                    {{#paper-button target=toggle action="toggleMenu" icon-button=true}}{{paper-icon icon="menu"}}{{/paper-button}}
+                  {{/paper-sidenav-toggle}}
+                  <span class="md-breadcrumb-page">
+                  </span>
+                </div>
+              {{/paper-toolbar}}
+
+              {{#paper-content class="md-padding no-overflow-x"}}
+                {{outlet}}
+              {{/paper-content}}
+            </div>
+        {{/paper-nav-container}}
+      {{else}}
+
+      {{#if isRegistered}}
+        <div class='login'>
+            {{#paper-card}}
+              {{#paper-card-content}}
+                <div style="display:flex;justify-content:center;">
+                    <img src="assets/Logo.png" alt="Logo" style="width:400px;height:220px;">
+                </div>
+                <h3>Login</h3>
+                <form class="form-horizontal" {{action "login" on="submit"}}>
+                  {{#if loginFailed}}
+                    <div class="alert alert-danger">Invalid username or password.</div>
+                  {{/if}}
+
+                  {{#if isSlowConnection}}
+                    <div class="alert alert-warning">The request seems to be taking more time than usual, please wait.</div>
+                  {{/if}}
+
+                  {{paper-input label="username" value=username}}
+                  {{paper-input label="password" type="password" value=password}}
+
+                  <div style='float:right'>
+                    <button type="submit" class="btn" {{bindAttr disabled="isProcessing"}}>
+                      Log in
+                    </button>
+                    {{#link-to 'register' invokeAction=(action 'registered')}} Register {{/link-to}}
+                  </div>
+                  {{#if loading}}
+                	      <div style='float:right'>
+                		  {{paper-progress-circular class="md-hue-2"}}
+                	      </div>
+                	 {{/if}}
+                </form>
+              {{/paper-card-content}}
+            {{/paper-card}}
+        </div>
+        {{else}}
+              {{outlet}}
+        {{/if}}
+
+
+      {{/if}}
+</body>
+</html>
