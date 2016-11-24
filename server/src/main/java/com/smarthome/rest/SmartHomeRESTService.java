@@ -1,6 +1,7 @@
 package com.smarthome.rest;
 
 import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
+import static org.apache.http.HttpStatus.SC_ACCEPTED;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -66,6 +68,28 @@ public class SmartHomeRESTService {
 		temperatureSchedule = new TemperatureSchedule(smartHomeService, smartHomeDAO);
 		humiditySchedule = new HumiditySchedule(smartHomeService, smartHomeDAO);
 		ledSchedule = new LedSchedule(smartHomeService, smartHomeDAO);
+	}
+	
+	@POST
+	@Path("/authenticate")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response authenticate(@FormParam("username") String username,
+            @FormParam("password") String password)
+	{
+		try {
+			boolean isUser = smartHomeDAO.isUser(username,password);
+			if (isUser) {
+				return Response.ok().build();
+			} else {
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported user").build();
+			}
+		} catch(RuntimeException e){
+			e.printStackTrace();
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+		}
 	}
 	
 	@GET
@@ -214,29 +238,40 @@ public class SmartHomeRESTService {
 	@POST
 	@Path("/user/create")
 	@Produces({MediaType.APPLICATION_JSON})
-	public Response addUser(String requestBody) throws DAOException, NumberFormatException, IOException, InterruptedException, ExecutionException, SQLException{
-		return null;
-//		String name = requestBody.split("name:")[1].split(",")[0];
-//		String password = requestBody.split("password:")[1].split(",")[0];
-//		String email = requestBody.split("email:")[1].split(",")[0];
-//		String mainRoom = requestBody.split("mainroom:")[1].split(",")[0];
-//		User user = new User();
-//		user.setName(name);
-//		user.setEmail(email);
-//		user.setPassword(password);
-//		user.set
-//		if (!teamDAO.teamExists(boardId))
-//		{
-//			ArrayList<Team> teams= new ArrayList<Team>();
-//			Team team = teamService.getTeam(Integer.parseInt(boardId), teamName); //get epics using the epic service
-//			teams.add(team);
-//			teamDAO.createTeams(teams);
-//			return Response.ok().entity("Added the team successfully").build();
-//		}
-//		else{
-//			return Response.ok().entity("Team Already exists in database").build();
-//			
+	public Response addUser(@FormParam("isAdmin") boolean isAdmin, @FormParam("name") String name
+			, @FormParam("username") String username, @FormParam("password") String password
+			, @FormParam("email") String email, @FormParam("houseId") String houseId
+			, @FormParam("roomIds") String roomIds) {
+
+		List<Room> allRooms = new ArrayList<Room>();
+		if(roomIds.contains(",")) {
+			String rooms[] = roomIds.split(",");
+			for (int i=0;i<rooms.length;i++) {
+				Room room = new Room(rooms[i].trim(), "Room " + (i+1));
+				allRooms.add(room);
+			}
 		}
+		User user = new User();
+		user.setAdmin(isAdmin);
+		user.setEmail(email);
+		Room house = new Room(houseId, "House");
+		user.setmainRoom(house);
+		user.setName(name);
+		user.setPassword(password);
+		user.setRooms(allRooms);
+		user.setUsername(username);
+		try {
+			smartHomeDAO.createUser(user);
+			return Response.ok().entity("User successfully registered").build();
+		} catch(RuntimeException e){
+			e.printStackTrace();
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+		} catch (DAOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+		}	
+	}
 	
 	private StreamingOutput convertTemperatureToJSON(final List<Temperature> temperatureCollection)
 	{

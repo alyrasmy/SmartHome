@@ -22,6 +22,7 @@ public interface SmartHomeDAO {
 	public Collection<Led> getAllLedUsage() throws SQLException;
 	public Collection<Led> getLedUsage(String startDate, String endDate, String sparkCoreId) throws SQLException;
 	
-	public void createUser(User user, long timestamp) throws DAOException;
+	public void createUser(User user) throws DAOException;
 	public User getUser(String userName) throws SQLException;
+	public boolean isUser(String username, String password) throws SQLException ;
 }
