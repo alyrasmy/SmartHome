@@ -2,6 +2,7 @@ package com.smarthome.rest;
 
 import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
 import static org.apache.http.HttpStatus.SC_ACCEPTED;
+import static org.apache.http.HttpStatus.SC_OK;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -79,16 +80,31 @@ public class SmartHomeRESTService {
 		try {
 			boolean isUser = smartHomeDAO.isUser(username,password);
 			if (isUser) {
-				return Response.ok().build();
+				List<User> usersCollection = new ArrayList<User>();
+				User user = smartHomeDAO.getUser(username);
+				usersCollection.add(user);
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertUserToJSON(usersCollection, true)).build();
 			} else {
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported user").build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("Unsupported user").build();
 			}
 		} catch(RuntimeException e){
 			e.printStackTrace();
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		}
 	}
 	
@@ -98,12 +114,15 @@ public class SmartHomeRESTService {
 	{
 		String output = "<h1>Hello World!<h1>" +
 				"<p>RESTful Service is running ... <br>Ping @ " + new Date().toString() + "</p<br>";
-		return Response.status(200).entity(output).build();
+		return Response.status(200)
+				.header("Access-Control-Allow-Origin", "*")
+				.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+				.entity(output).build();
 	}
 	
 	//http response for a list of temperature readings
 	@GET
-	@Path("/temperature")
+	@Path("/temperatures")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getTemperature(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws SQLException
 	{
@@ -112,21 +131,30 @@ public class SmartHomeRESTService {
 			{
 				List<Temperature> temperatureCollection = new ArrayList<Temperature>();
 				temperatureCollection = (List<Temperature>) smartHomeDAO.getTemperature(startDate,endDate);
-				return Response.ok().entity(convertTemperatureToJSON(temperatureCollection)).build();
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertTemperatureToJSON(temperatureCollection)).build();
 			} else { // get all temperature record in the database
 				List<Temperature> temperatureCollection = new ArrayList<Temperature>();
 				temperatureCollection = (List<Temperature>) smartHomeDAO.getAllTemperature();
-				return Response.ok().entity(convertTemperatureToJSON(temperatureCollection)).build();
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertTemperatureToJSON(temperatureCollection)).build();
 			}
 		} catch(RuntimeException e){
 			e.printStackTrace();
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		}
 	}
 	
 	//http response for a list of humidity readings
 	@GET
-	@Path("/humidity")
+	@Path("/humidities")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getHumidity(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate) throws SQLException
 	{
@@ -135,21 +163,30 @@ public class SmartHomeRESTService {
 			{
 				List<Humidity> humidityCollection = new ArrayList<Humidity>();
 				humidityCollection = (List<Humidity>) smartHomeDAO.getHumidity(startDate,endDate);
-				return Response.ok().entity(convertHumidityToJSON(humidityCollection)).build();
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertHumidityToJSON(humidityCollection)).build();
 			} else { // get all humidity record in the database
 				List<Humidity> humidityCollection = new ArrayList<Humidity>();
 				humidityCollection = (List<Humidity>) smartHomeDAO.getAllHumidity();
-				return Response.ok().entity(convertHumidityToJSON(humidityCollection)).build();
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertHumidityToJSON(humidityCollection)).build();
 			}
 		} catch(RuntimeException e){
 			e.printStackTrace();
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		}
 	}
 	
 	//http response for a list of led daily usage readings
 	@GET
-	@Path("/led")
+	@Path("/leds")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getLedUsage(@QueryParam("startDate") String startDate, @QueryParam("endDate") String endDate, @QueryParam("boardId") String boardId) throws SQLException
 	{
@@ -158,21 +195,30 @@ public class SmartHomeRESTService {
 			{
 				List<Led> ledUsageCollection = new ArrayList<Led>();
 				ledUsageCollection = (List<Led>) smartHomeDAO.getLedUsage(startDate,endDate,boardId);
-				return Response.ok().entity(convertLedUsageToJSON(ledUsageCollection)).build();
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertLedUsageToJSON(ledUsageCollection)).build();
 			} else { // get all led usage record in the database
 				List<Led> ledUsageCollection = new ArrayList<Led>();
 				ledUsageCollection = (List<Led>) smartHomeDAO.getAllLedUsage();
-				return Response.ok().entity(convertLedUsageToJSON(ledUsageCollection)).build();
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertLedUsageToJSON(ledUsageCollection)).build();
 			}
 		} catch(RuntimeException e){
 			e.printStackTrace();
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		}
 	}
 	
 	//http response for a user
 	@GET
-	@Path("/user/{user_id}")
+	@Path("/users/{user_id}")
 	@Produces({MediaType.APPLICATION_JSON})
 	public Response getUser(@PathParam("user_id") String userId)
 	{
@@ -180,13 +226,22 @@ public class SmartHomeRESTService {
 			List<User> usersCollection = new ArrayList<User>();
 			User user = smartHomeDAO.getUser(userId);
 			usersCollection.add(user);
-			return Response.ok().entity(convertUserToJSON(usersCollection, true)).build();
+			return Response.ok()
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(convertUserToJSON(usersCollection, true)).build();
 		} catch(RuntimeException e){
 			e.printStackTrace();
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		}
 	}
 	
@@ -199,9 +254,15 @@ public class SmartHomeRESTService {
 		if(action.equals("start"))
 		{
 			temperatureSchedule.run(); //run the job
-			return Response.ok().entity("Ran the temperature job schedule successfully").build();
+			return Response.ok()
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("Ran the temperature job schedule successfully").build();
 		}else{
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported action").build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("Unsupported action").build();
 		}
 	}
 	
@@ -214,9 +275,15 @@ public class SmartHomeRESTService {
 		if(action.equals("start"))
 		{
 			humiditySchedule.run(); //run the job
-			return Response.ok().entity("Ran the humidity job schedule successfully").build();
+			return Response.ok()
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("Ran the humidity job schedule successfully").build();
 		}else{
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported action").build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("Unsupported action").build();
 		}
 	}
 	
@@ -229,9 +296,15 @@ public class SmartHomeRESTService {
 		if(action.equals("start"))
 		{
 			ledSchedule.run(); //run the job
-			return Response.ok().entity("Ran the led job schedule successfully").build();
+			return Response.ok()
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("Ran the led job schedule successfully").build();
 		}else{
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity("Unsupported action").build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("Unsupported action").build();
 		}
 	}
 	
@@ -262,14 +335,23 @@ public class SmartHomeRESTService {
 		user.setUsername(username);
 		try {
 			smartHomeDAO.createUser(user);
-			return Response.ok().entity("User successfully registered").build();
+			return Response.ok()
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity("User successfully registered").build();
 		} catch(RuntimeException e){
 			e.printStackTrace();
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		} catch (DAOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			return Response.status(SC_INTERNAL_SERVER_ERROR).entity(GSON.toJson(e.getStackTrace())).build();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
 		}	
 	}
 	
