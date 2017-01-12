@@ -100,7 +100,7 @@ export default Ember.Controller.extend({
 			self.set('loading', false);
 			self.set('session.isAuthenticated', true);
 			self.set('isAdmin',response.data.attributes.isadmin)
-			if (self.get('currentRouteName') == "index") {
+			if (self.get('currentRouteName') == "index" || self.get('currentRouteName') == "register" ) {
 					self.transitionToRoute("dashboard");
 			}
 		},
