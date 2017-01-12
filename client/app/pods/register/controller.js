@@ -33,7 +33,7 @@ export default Ember.Controller.extend({
 								url: postUrl,
 								type: "POST",
 								data: this.getProperties("name", "username","password","email","houseId","roomIds","isAdmin"),
-								dataType: 'json',
+								dataType: 'text',
 								async: true,
 								success: function (response) {
 										self._actions.success(self,response);
