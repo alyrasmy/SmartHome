@@ -1,5 +1,4 @@
 <html>
-<body style="background-image: url('assets/background1.jpg');">
       {{#if session.isAuthenticated}}
         {{#paper-nav-container class="site-nav-container"}}
             {{#paper-sidenav class="md-sidenav-left md-whiteframe-z2 site-sidenav" locked-open="gt-md" }}
@@ -40,7 +39,7 @@
             </div>
         {{/paper-nav-container}}
       {{else}}
-
+  <body style="background-image: url('assets/background1.jpg');">
       {{#if isRegistered}}
         <div class='login'>
             {{#paper-card}}
@@ -80,7 +79,7 @@
               {{outlet}}
         {{/if}}
 
-
+  </body>
       {{/if}}
-</body>
+
 </html>

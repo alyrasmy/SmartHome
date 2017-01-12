@@ -13,6 +13,10 @@ module.exports = function(environment) {
         // e.g. 'with-controller': true
       }
     },
+    contentSecurityPolicy: {
+      // ... other stuff here
+      'connect-src': "'self' http://localhost:8080"
+    },
 
     APP: {
       // Here you can pass flags/options to your application instance

@@ -7,6 +7,8 @@ export default Ember.Controller.extend({
   timeout: null,
 	loading: false,
 	isRegistered: true,
+	isAdmin: false,
+	username: "aemarasmy",
 
 	routes: Ember.computed('model.snapshots.[]', 'model.configuration', function() {
 		var routes = [{
@@ -26,6 +28,29 @@ export default Ember.Controller.extend({
 			alias: 'Sign Out',
 			icon: 'exit-to-app'
 		}];
+		if(this.get("isAdmin")) {
+			routes = [{
+				route: 'profile',
+				alias: 'Profile',
+				icon: 'person'
+			}, {
+				route: 'analytics',
+				alias: 'Analytics',
+				icon: 'layers'
+			}, {
+				route: 'control',
+				alias: 'Control',
+				icon: 'settings'
+			}, {
+				route: 'newuser',
+				alias: 'Add New User',
+				icon: 'person'
+			}, {
+				route: 'logout',
+				alias: 'Sign Out',
+				icon: 'exit-to-app'
+			}];
+		}
 		return routes;
 	}),
 
@@ -52,25 +77,43 @@ export default Ember.Controller.extend({
 			var host = this.store.adapterFor('application').get('host'),
 					namespace = this.store.adapterFor('application').namespace,
 					postUrl = [ host, namespace, 'authenticate' ].join('/');
-			var request = $.post(postUrl, this.getProperties("username", "password"));
-			this.set('loading', true);
-			request.then(this._actions.success.bind(this), this._actions.failure.bind(this));
+			//var request = $.post(postUrl, this.getProperties("username", "password"),this._actions.failure);
+			//.fail(this._actions.success)
+			//this.set('loading', true);
+			//request.fail(this._actions.success);
+			//request.done(function( jqXHR, textStatus ) {alert( "Request failed: " + textStatus );});
+			//request.then(this._actions.success.bind(this), this._actions.failure.bind(this));
+			var self = this;
+			$.ajax({
+			    url: postUrl,
+			    type: "POST",
+			    data: this.getProperties("username", "password"),
+					dataType: 'json',
+					async: true,
+			    success: function (response) {
+							self._actions.success(self,response);
+    			},
+					error: function (jqXHR, textStatus, errorThrown) {
+							self._actions.failure(self);
+    			}
+			});
 		},
 
-		success: function() {
-			var self = this;
-			this_actions.reset(self);
-			this.set("loginFailed", false);
-			this.set('loading', false);
-			this.set('session.isAuthenticated', true);
-			document.location = "/welcome";
+		success: function(self,response) {
+			self._actions.reset(self);
+			self.set("loginFailed", false);
+			self.set('loading', false);
+			self.set('session.isAuthenticated', true);
+			self.set('isAdmin',response.data.attributes.isadmin)
+			if (self.get('currentRouteName') == "index") {
+					self.transitionToRoute("dashboard");
+			}
 		},
 
-		failure: function() {
-			var self = this;
-			this._actions.reset(self);
-			this.set('loading', false);
-			this.set("loginFailed", true);
+		failure: function(self) {
+			self._actions.reset(self);
+			self.set('loading', false);
+			self.set("loginFailed", true);
 		},
 
 		slowConnection: function() {

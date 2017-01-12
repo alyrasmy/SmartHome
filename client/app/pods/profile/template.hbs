@@ -1,0 +1,47 @@
+{{#paper-card}}
+  {{#paper-card-content}}
+    <div style="display:flex;justify-content:center;">
+        <img src="assets/Logo.png" alt="Logo" style="width:400px;height:220px;">
+    </div>
+    <h3>Profile</h3>
+      <BR></BR>
+      {{#if submitFailed}}
+        <div class="alert alert-danger">Invalid Inputs</div>
+      {{/if}}
+
+      {{#if isSlowConnection}}
+        <div class="alert alert-warning">The request seems to be taking more time than usual, please wait.</div>
+      {{/if}}
+
+      {{#if editMode}}
+        <form class="form-horizontal" {{action "submit" on="submit"}}>
+          {{paper-input label="Name"  width=80 value=name}}
+          {{paper-input label="Username" width=50  value=username}}
+          {{paper-input label="E-mail" value=email}}
+          {{paper-input label="Old Password" type="password" value=oldPassword}}
+          {{paper-input label="New Password" type="password" value=newPassword}}
+          {{paper-input label="House Id" value=houseId}}
+          {{paper-input label="Enter All Room Ids Separated by comma" value=roomIds}}
+          <BR></BR>
+          <div style='float:right'>
+            <button type="submit" class="btn" {{bindAttr disabled="isProcessing"}}>
+              Submit
+            </button>
+              {{#paper-button action="cancel"}}Cancel{{/paper-button}}
+          </div>
+        </form>
+      {{else}}
+          {{paper-input label="Name"  width=80 disabled=true value=model.user.name}}
+          {{paper-input label="Username" width=50  disabled=true value=user.username}}
+          {{paper-input label="Password" type="password" disabled=true value=user.password}}
+          {{paper-input label="E-mail" disabled=true value=user.email}}
+          {{paper-input label="House Id" disabled=true value=userHouseId}}
+          {{paper-input label="Enter All Room Ids Separated by comma" disabled=true value=user.roomIds}}
+          <BR></BR>
+          <div style='float:right'>
+            {{#paper-button action="editable"}}Edit{{/paper-button}}
+          </div>
+      {{/if}}
+
+  {{/paper-card-content}}
+{{/paper-card}}

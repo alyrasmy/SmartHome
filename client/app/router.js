@@ -7,15 +7,17 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
 	this.route('dashboard', {
-		path: '/'
+		path: '/welcome'
 	}, function() {
 		this.route('loading');
 	});
-
+	this.route('profile');
 	this.route('register');
-	// this.route('team-details', {
-	// 	path: '/teams/:team_name'
-	// });
+
+	this.route('analytics');
+	this.route('analytics-detail', {
+		path: '/analytics/:analytic_type'
+	});
 
 });
 

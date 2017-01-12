@@ -1,7 +1,7 @@
 import DS from 'ember-data';
 
 export default DS.JSONAPIAdapter.extend({
-	namespace: 'release/rest/api/smarthome',
+	namespace: 'release-0.0.1-SNAPSHOT/rest/api/smarthome',
   host: 'http://localhost:8080',
 	shouldReloadAll: function() {
 		return true

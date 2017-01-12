@@ -2,5 +2,5 @@ import DS from "ember-data";
 
 export default DS.Model.extend({
   value: DS.attr('string'),
-  timestamp: DS.attr('number')
+  timestamp: DS.attr('date')
 });
