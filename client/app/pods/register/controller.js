@@ -48,20 +48,18 @@ export default Ember.Controller.extend({
 				}
 		  },
 
-		  success: function() {
-				var self = this;
-		    this_actions.reset(self);
-				this.set("loginFailed", false);
-				this.set('loading', false);
-				this.set("controllers.application.isRegistered", true);
-				this.transitionToRoute("dashboard");
+		  success: function(self,response) {
+		    self._actions.reset(self);
+				self.set("loginFailed", false);
+				self.set('loading', false);
+				self.set("controllers.application.isRegistered", true);
+				self.transitionToRoute("dashboard");
 		  },
 
-		  failure: function() {
-				var self = this;
-		    this._actions.reset(self);
-				this.set('loading', false);
-		    this.set("loginFailed", true);
+		  failure: function(self) {
+		    self._actions.reset(self);
+				self.set('loading', false);
+		    self.set("loginFailed", true);
 		  },
 
 		  slowConnection: function() {
