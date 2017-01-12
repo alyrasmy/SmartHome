@@ -77,13 +77,8 @@ export default Ember.Controller.extend({
 			var host = this.store.adapterFor('application').get('host'),
 					namespace = this.store.adapterFor('application').namespace,
 					postUrl = [ host, namespace, 'authenticate' ].join('/');
-			//var request = $.post(postUrl, this.getProperties("username", "password"),this._actions.failure);
-			//.fail(this._actions.success)
-			//this.set('loading', true);
-			//request.fail(this._actions.success);
-			//request.done(function( jqXHR, textStatus ) {alert( "Request failed: " + textStatus );});
-			//request.then(this._actions.success.bind(this), this._actions.failure.bind(this));
 			var self = this;
+			this.set('loading', true);
 			$.ajax({
 			    url: postUrl,
 			    type: "POST",

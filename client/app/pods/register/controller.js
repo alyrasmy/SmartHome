@@ -27,9 +27,21 @@ export default Ember.Controller.extend({
 						var host = this.store.adapterFor('application').get('host'),
 								namespace = this.store.adapterFor('application').namespace,
 								postUrl = [ host, namespace, 'user/create' ].join('/');
-						var request = $.post(postUrl, this.getProperties("name", "username","password","email","houseId","roomIds","isAdmin"));
 						this.set('loading', true);
-						request.then(this._actions.success.bind(this), this._actions.failure.bind(this));
+						var self = this;
+						$.ajax({
+								url: postUrl,
+								type: "POST",
+								data: this.getProperties("name", "username","password","email","houseId","roomIds","isAdmin"),
+								dataType: 'json',
+								async: true,
+								success: function (response) {
+										self._actions.success(self,response);
+								},
+								error: function (jqXHR, textStatus, errorThrown) {
+										self._actions.failure(self);
+								}
+						});
 					} else { // both password fields are not equal. Throw invalid input warning
 						this.set("loginFailed", true);
 					}
