@@ -161,8 +161,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	@Override
 	public void createTemperature(Temperature temperature, Timestamp timestamp) throws DAOException {
 		int roomId;
-		try(Connection connection = basicDataSource.getConnection();
-			PreparedStatement createTemperatureStatement = connection.prepareStatement(CREATE_TEMPERATURE_SQL, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement createTemperatureStatement = connection.prepareStatement(CREATE_TEMPERATURE_SQL, Statement.RETURN_GENERATED_KEYS);
 		) {
 				if(!recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL))
 				{
@@ -229,8 +228,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	@Override
 	public void createHumidity(Humidity humidity, Timestamp timestamp) throws DAOException {
 		int roomId;
-		try(Connection connection = basicDataSource.getConnection();
-			PreparedStatement createHumidityStatement = connection.prepareStatement(CREATE_HUMIDITY_SQL, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement createHumidityStatement = connection.prepareStatement(CREATE_HUMIDITY_SQL, Statement.RETURN_GENERATED_KEYS);
 		) {
 				if(!recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL))
 				{
@@ -297,8 +295,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	@Override
 	public void createLed(Led led, Timestamp timestamp, String sparkCoreId) throws DAOException {
 		int roomId;
-		try(Connection connection = basicDataSource.getConnection();
-			PreparedStatement createLedStatement = connection.prepareStatement(CREATE_LED_SQL, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement createLedStatement = connection.prepareStatement(CREATE_LED_SQL, Statement.RETURN_GENERATED_KEYS);
 		) {
 				if(!recordExists(connection,sparkCoreId,GET_ROOM_SQL))
 				{
@@ -365,9 +362,8 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 
 	@Override
 	public void createUser(User user) throws DAOException {
-		try(Connection connection = basicDataSource.getConnection();
-				PreparedStatement createUserStatement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS);
-				PreparedStatement updateUserStatement = connection.prepareStatement(UPDATE_USER_SQL, Statement.RETURN_GENERATED_KEYS);
+		try(PreparedStatement createUserStatement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement updateUserStatement = connection.prepareStatement(UPDATE_USER_SQL, Statement.RETURN_GENERATED_KEYS);
 			) {
 					PreparedStatement userStatement=createUserStatement;
 					if(recordExists(connection,user.getUsername(),GET_USER_SQL))
