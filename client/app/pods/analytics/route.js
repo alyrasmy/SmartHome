@@ -1,9 +1,6 @@
 import Ember from 'ember';
 
 export default Ember.Route.extend({
-  username: function(controller, model) {
-    return controller.get('username');
-  },
   model: function(param) {
     let self = this;
     return Ember.RSVP.hash({
@@ -12,4 +9,9 @@ export default Ember.Route.extend({
         humidities: self.get('store').find('humidity')
       });
   },
+  beforeModel: function() {
+    if (!this.controllerFor("application").get("session.isAuthenticated")) {
+        this.transitionTo("/");
+    }
+  }
 });

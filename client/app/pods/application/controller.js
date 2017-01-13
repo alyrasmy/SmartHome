@@ -2,13 +2,13 @@ import Ember from 'ember';
 
 export default Ember.Controller.extend({
 	loginFailed: false,
+	requestFailed: false,
   isProcessing: false,
   isSlowConnection: false,
   timeout: null,
 	loading: false,
 	isRegistered: true,
-	isAdmin: false,
-	username: "aemarasmy",
+	isAdmin: true,
 
 	routes: Ember.computed('model.snapshots.[]', 'model.configuration', function() {
 		var routes = [{
@@ -63,7 +63,12 @@ export default Ember.Controller.extend({
 			if(e.route == "logout") {
 				this.set('session.isAuthenticated', false);
 			}
-			this.transitionToRoute(e.route);
+			if(e.route == "profile") {
+				this.transitionToRoute('profile', {queryParams: {username: this.get("username")}});
+			} else {
+				this.transitionToRoute(e.route);
+			}
+
 		},
 
 		login: function() {
@@ -97,6 +102,7 @@ export default Ember.Controller.extend({
 		success: function(self,response) {
 			self._actions.reset(self);
 			self.set("loginFailed", false);
+			self.set("requestFailed", false);
 			self.set('loading', false);
 			self.set('session.isAuthenticated', true);
 			self.set('isAdmin',response.data.attributes.isadmin)
@@ -108,7 +114,7 @@ export default Ember.Controller.extend({
 		failure: function(self) {
 			self._actions.reset(self);
 			self.set('loading', false);
-			self.set("loginFailed", true);
+			self.set("requestFailed", true);
 		},
 
 		slowConnection: function() {
@@ -125,6 +131,10 @@ export default Ember.Controller.extend({
 
 		registered: function() {
 			this.set("isRegistered", false);
+		},
+
+		gotoHome: function() {
+			this.transitionToRoute("dashboard");
 		}
 	}
 });

@@ -1,13 +1,15 @@
 <html>
       {{#if session.isAuthenticated}}
         {{#paper-nav-container class="site-nav-container"}}
-            {{#paper-sidenav class="md-sidenav-left md-whiteframe-z2 site-sidenav" locked-open="gt-md" }}
+            {{#paper-sidenav class="md-sidenav-left md-whiteframe-z2 site-sidenav" }}
               {{#paper-toolbar class="site-content-toolbar"}}
-                <div class="md-toolbar-tools">
-                  <div class="logo">
-                    <img src="assets/Logo.png" alt="Logo" style="width:200px;height:50px;">
-                  </div>
-                </div>
+                {{#link-to 'dashboard' invokeAction=(action 'gotoHome')}} 
+                    <div class="md-toolbar-tools">
+                      <div class="logo">
+                        <img src="assets/Logo.png" alt="Logo" style="width:200px;height:50px;">
+                      </div>
+                    </div>
+                {{/link-to}}
               {{/paper-toolbar}}
               {{#paper-content}}
                 {{#paper-list}}
@@ -45,12 +47,15 @@
             {{#paper-card}}
               {{#paper-card-content}}
                 <div style="display:flex;justify-content:center;">
-                    <img src="assets/Logo.png" alt="Logo" style="width:400px;height:220px;">
+                    <img src="assets/Logo2.jpg" alt="Logo" style="width:30%;height:30%;">
                 </div>
                 <h3>Login</h3>
                 <form class="form-horizontal" {{action "login" on="submit"}}>
                   {{#if loginFailed}}
                     <div class="alert alert-danger">Invalid username or password.</div>
+                  {{/if}}
+                  {{#if requestFailed}}
+                    <div class="alert alert-danger">Request Failed</div>
                   {{/if}}
 
                   {{#if isSlowConnection}}

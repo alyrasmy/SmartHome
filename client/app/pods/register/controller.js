@@ -4,6 +4,7 @@ import moment from 'moment';
 export default Ember.Controller.extend({
 	needs: ['application'],
 	loginFailed: false,
+	requestFailed: false,
   isProcessing: false,
   isSlowConnection: false,
   timeout: null,
@@ -51,6 +52,7 @@ export default Ember.Controller.extend({
 		  success: function(self,response) {
 		    self._actions.reset(self);
 				self.set("loginFailed", false);
+				self.set("requestFailed", false);
 				self.set('loading', false);
 				self.set("controllers.application.isRegistered", true);
 				self.transitionToRoute("dashboard");
@@ -59,7 +61,7 @@ export default Ember.Controller.extend({
 		  failure: function(self) {
 		    self._actions.reset(self);
 				self.set('loading', false);
-		    self.set("loginFailed", true);
+		    self.set("requestFailed", true);
 		  },
 
 		  slowConnection: function() {

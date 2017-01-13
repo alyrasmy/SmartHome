@@ -2,12 +2,15 @@
       {{#paper-card}}
         {{#paper-card-content}}
           <div style="display:flex;justify-content:center;">
-              <img src="assets/Logo.png" alt="Logo" style="width:400px;height:220px;">
+              <img src="assets/Logo2.jpg" alt="Logo" style="width:30%;height:30%;">
           </div>
           <h3>Register</h3>
           <form class="form-horizontal" {{action "register" on="submit"}}>
             {{#if loginFailed}}
               <div class="alert alert-danger">Invalid Inputs</div>
+            {{/if}}
+            {{#if requestFailed}}
+              <div class="alert alert-danger">Request Failed</div>
             {{/if}}
 
             {{#if isSlowConnection}}

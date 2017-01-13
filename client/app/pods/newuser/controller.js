@@ -9,23 +9,11 @@ export default Ember.Controller.extend({
   timeout: null,
 	loading: false,
 	requestFailed: false,
-	editMode:false,
-	isAdmin: true,
+	isAdmin: false,
+	roomIds:null,
 
 	user: Ember.computed('model.user', function() {
 		return this.get("model.user");
-	}),
-
-	name: Ember.computed('model.user', function() {
-		return this.get("model.user").get("name");
-	}),
-
-	email: Ember.computed('model.user', function() {
-		return this.get("model.user").get("email");
-	}),
-
-	username: Ember.computed('model.user', function() {
-		return this.get("model.user").get("username");
 	}),
 
 	userHouseId: Ember.computed('model.user', function() {
@@ -35,10 +23,9 @@ export default Ember.Controller.extend({
 	userRooms: Ember.computed('model.user', function() {
 		var self = this;
 		var modelRooms = this.get("model.user").get("rooms");
-		var rooms = '';
+		var rooms = [];
 		modelRooms.forEach(function(room) {
-			rooms += room.get('id');
-			rooms += ",";
+			rooms.push({"name":room.get('name'),"id":room.get('id'),"hasAccess":false});
 		})
 
 		return rooms;
@@ -48,16 +35,28 @@ export default Ember.Controller.extend({
 		submit: function() {
 				var self = this;
 				if ( this.get("name") == null || this.get("username") == null ||
-				this.get("oldPassword") == null || this.get("newPassword") == null ||
-				this.get("email") == null  || this.get("userHouseId") == null ||
-				this.get("userRooms") == null) {
+				this.get("password") == null || this.get("cPassword") == null ||
+				this.get("email") == null) {
 					this.set("submitFailed", true);
 				} else {
-					if (this.get("oldPassword") == this.get("user").get("password")) {
+					if (this.get("password") == this.get("cPassword")) {
 						this.setProperties({
 							submitFailed: false,
 							isProcessing: true
 						});
+						if(this.get("hasAccessToHome")) {
+								this.get("userHouseId");
+						} else {
+							this.set("userHouseId","")
+						}
+						var rooms = '';
+						this.get("userRooms").forEach(function(room) {
+							if(room.hasAccess) {
+									rooms += room.id
+									rooms += ","
+							}
+						});
+						this.set("roomIds",rooms);
 						this.set("timeout", setTimeout(this._actions.slowConnection.bind(this), 5000));
 						var host = this.store.adapterFor('application').get('host'),
 								namespace = this.store.adapterFor('application').namespace,
@@ -67,7 +66,7 @@ export default Ember.Controller.extend({
 								$.ajax({
 										url: postUrl,
 										type: "POST",
-										data: this.getProperties("name", "username","newPassword","email","userHouseId","userRooms","isAdmin"),
+										data: this.getProperties("name", "username","password","email","userHouseId","roomIds","isAdmin"),
 										dataType: 'text',
 										async: true,
 										success: function (response) {
@@ -88,7 +87,6 @@ export default Ember.Controller.extend({
 				self.set("requestFailed", false);
 				self.set("submitFailed", false);
 				self.set('loading', false);
-				this.set("editMode",false);
 			},
 
 		  failure: function(self) {
@@ -107,16 +105,10 @@ export default Ember.Controller.extend({
 		      isProcessing: false,
 		      isSlowConnection: false
 		    });
-		  },
+		  }
 
-			cancel: function() {
-				this.set("editMode",false);
-				this.set("requestFailed", false);
-			},
-
-			editable: function() {
-				this.set("editMode",true);
-				this.get("user");
-			}
+			// mut: function(param) {
+			// 	this.set("isSlowConnection", param);
+			// }
 		}
 });

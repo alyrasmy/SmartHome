@@ -12,9 +12,6 @@ export default Ember.Route.extend({
         refreshModel: true
       },
   },
-  username: function(controller, model) {
-    return controller.get('username');
-  },
   model: function(param) {
     let self = this;
     return Ember.RSVP.hash({
@@ -24,4 +21,9 @@ export default Ember.Route.extend({
         analyticType:param.analytic_type
       });
   },
+  beforeModel: function() {
+    if (!this.controllerFor("application").get("session.isAuthenticated")) {
+        this.transitionTo("/");
+    }
+  }
 });

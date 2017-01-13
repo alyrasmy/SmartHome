@@ -13,6 +13,8 @@ Router.map(function() {
 	});
 	this.route('profile');
 	this.route('register');
+	this.route('newuser');
+	this.route('control');
 
 	this.route('analytics');
 	this.route('analytics-detail', {
