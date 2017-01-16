@@ -5,7 +5,6 @@
               <img src="assets/Logo2.jpg" alt="Logo" style="width:30%;height:30%;">
           </div>
           <h3>Register</h3>
-          <form class="form-horizontal" {{action "register" on="submit"}}>
             {{#if loginFailed}}
               <div class="alert alert-danger">Invalid Inputs</div>
             {{/if}}
@@ -23,8 +22,19 @@
             {{paper-input label="Confirm Password" type="password" value=cPassword}}
             {{paper-input label="E-mail" value=email}}
             {{paper-input label="House Id" value=houseId}}
-            {{paper-input label="Enter All Room Ids Separated by comma" value=roomIds}}
+                {{#each rooms as |room|}}
+                    <div div class="md-actions" layout="row">
+                        <div style='float:left'>
+                      	    {{paper-input label="Room Name" value=room.name}}
+                        </div>
 
+                  	    <div style='float:right'>
+                  		      {{paper-input label="Board ID" value=room.id}}
+                  	    </div>
+                    </div>
+                {{/each}}
+            {{#paper-button action="addRoom"}}+ Add Room{{/paper-button}}
+          <form class="form-horizontal" {{action "register" on="submit"}}>
             <div style='float:right'>
               <button type="submit" class="btn" {{bindAttr disabled="isProcessing"}}>
                 Register

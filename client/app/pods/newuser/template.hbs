@@ -24,14 +24,11 @@
         {{paper-input label="Confirm Password" type="password" value=cPassword}}
         <b>Access to:</b>
         <p style="margin-left: 40px">
-            {{#paper-checkbox value=hasAccessToHome}}
-                Home Sensors Analytics {{hasAccessToHome}}
-            {{/paper-checkbox}}
-
+            {{input type="checkbox" checked=hasAccessToHome}}Home Sensors Analytics
+            <BR></BR>
             {{#each userRooms as |room|}}
-                {{#paper-checkbox value=room.hasAccess}}
-                    {{room.name}} {{room.hasAccess}}
-                {{/paper-checkbox}}
+              {{input type="checkbox" checked=room.hasAccess}}{{room.name}}
+              <BR></BR>
             {{/each}}
         </p>
 

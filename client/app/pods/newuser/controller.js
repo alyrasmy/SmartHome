@@ -31,6 +31,12 @@ export default Ember.Controller.extend({
 		return rooms;
 	}),
 
+	rooms: [],
+
+	roomsStringfy: Ember.computed('model.user', function() {
+			return 	JSON.stringify(this.get("rooms"));
+	}),
+
 	actions: {
 		submit: function() {
 				var self = this;
@@ -49,14 +55,13 @@ export default Ember.Controller.extend({
 						} else {
 							this.set("userHouseId","")
 						}
-						var rooms = '';
+
 						this.get("userRooms").forEach(function(room) {
 							if(room.hasAccess) {
-									rooms += room.id
-									rooms += ","
+									self.get("rooms").push({"name":room.name,"id":room.id});
 							}
 						});
-						this.set("roomIds",rooms);
+
 						this.set("timeout", setTimeout(this._actions.slowConnection.bind(this), 5000));
 						var host = this.store.adapterFor('application').get('host'),
 								namespace = this.store.adapterFor('application').namespace,
@@ -66,7 +71,7 @@ export default Ember.Controller.extend({
 								$.ajax({
 										url: postUrl,
 										type: "POST",
-										data: this.getProperties("name", "username","password","email","userHouseId","roomIds","isAdmin"),
+										data: this.getProperties("name", "username","password","email","userHouseId","roomsStringfy","isAdmin"),
 										dataType: 'text',
 										async: true,
 										success: function (response) {
@@ -87,6 +92,7 @@ export default Ember.Controller.extend({
 				self.set("requestFailed", false);
 				self.set("submitFailed", false);
 				self.set('loading', false);
+				self.transitionToRoute("dashboard");
 			},
 
 		  failure: function(self) {
@@ -106,9 +112,5 @@ export default Ember.Controller.extend({
 		      isSlowConnection: false
 		    });
 		  }
-
-			// mut: function(param) {
-			// 	this.set("isSlowConnection", param);
-			// }
 		}
 });

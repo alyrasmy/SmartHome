@@ -29,6 +29,10 @@ import javax.ws.rs.core.StreamingOutput;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.gson.stream.JsonWriter;
 import com.smarthome.dao.DAOException;
 import com.smarthome.dao.JDBCSmartHomeDAO;
@@ -314,16 +318,20 @@ public class SmartHomeRESTService {
 	public Response addUser(@FormParam("isAdmin") boolean isAdmin, @FormParam("name") String name
 			, @FormParam("username") String username, @FormParam("password") String password
 			, @FormParam("email") String email, @FormParam("houseId") String houseId
-			, @FormParam("roomIds") String roomIds) {
+			, @FormParam("roomsStringfy") String roomsStringfy) {
 
 		List<Room> allRooms = new ArrayList<Room>();
-		if(roomIds.contains(",")) {
-			String rooms[] = roomIds.split(",");
-			for (int i=0;i<rooms.length;i++) {
-				Room room = new Room(rooms[i].trim(), "Room " + (i+1));
-				allRooms.add(room);
-			}
-		}
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(roomsStringfy);
+        JsonArray jasonArray = element.getAsJsonArray();
+        for(Object js : jasonArray){
+            JsonObject json = (JsonObject) js;
+            String id = json.get("id").toString();
+            String roomName = json.get("name").toString();
+			Room room = new Room(id.substring(1, id.length()-1), roomName.substring(1, roomName.length()-1));
+			allRooms.add(room);
+        }
+        
 		User user = new User();
 		user.setAdmin(isAdmin);
 		user.setEmail(email);

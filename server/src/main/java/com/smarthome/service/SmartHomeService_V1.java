@@ -14,7 +14,7 @@ import com.smarthome.model.Temperature;
 
 public class SmartHomeService_V1 {
     public static final String PHOTON_CORE_ID = "230046001347343339383037";
-    public static final String[] SPARK_CORE_IDS = {"53ff72066667574817532367"}; //{"53ff72066667574817532367","53ff6f066667574834212367","53ff6f066667574835380967"};
+    public static final String[] SPARK_CORE_IDS = {"53ff72066667574817532367","53ff6f066667574834212367","53ff6f066667574835380967"};
     
 	public SmartHomeService_V1() {
 	}

@@ -37,6 +37,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	private final String CREATE_USER_ROOM_SQL = "insert into user_room (user_id, room_id) values (?, ?);";
 	private final String GET_ALLROOM_SQL = "select * from user_room where user_id=?;";
 	private final String GET_ROOM_SQL = "select * from room where room_board_id=?;";
+	private final String GET_ROOM2_SQL = "select * from room where room_board_id=? and room_name=?;";
 	private final String CREATE_ROOM_SQL = "insert into room (room_name, room_board_id) values (?, ?);";
 	private final String GET_ROOM_SQL_ROOMID = "select * from room where room_id=?;";
 	
@@ -47,6 +48,20 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 			this.basicDataSource = basicDataSource;
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private Boolean roomExists(Connection connection, String id, String name, String query) throws SQLException {
+		try(PreparedStatement statement = connection.prepareStatement(query);) {	
+			statement.setString(1, id);
+			statement.setString(2, name);	
+			try(ResultSet searchIdResultSet = statement.executeQuery();) {
+				if(searchIdResultSet.next()) {
+					return true;
+				}else {
+					return false;
+				}
+			}
 		}
 	}
 	
@@ -81,6 +96,22 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 		int roomId;
 		try(PreparedStatement statement = connection.prepareStatement(query);) {	
 			statement.setString(1, value);	
+			try(ResultSet searchIdResultSet = statement.executeQuery();) {
+				if(searchIdResultSet.next()) {
+					roomId = searchIdResultSet.getInt("room_id");
+				}else {
+					throw new RuntimeException("Expected room_id not found");
+				}
+			}
+		}
+		return roomId;
+	}
+	
+	private int getRoomIdAndName(Connection connection, String id, String name, String query) throws SQLException {
+		int roomId;
+		try(PreparedStatement statement = connection.prepareStatement(query);) {	
+			statement.setString(1, id);	
+			statement.setString(2, name);	
 			try(ResultSet searchIdResultSet = statement.executeQuery();) {
 				if(searchIdResultSet.next()) {
 					roomId = searchIdResultSet.getInt("room_id");
@@ -130,7 +161,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 			statement.setString(2, id);
 			statement.execute();
 			
-			ResultSet roomResultSet = connection.createStatement().executeQuery("SELECT * FROM room where room_board_id='" +  id + "'");
+			ResultSet roomResultSet = connection.createStatement().executeQuery("SELECT * FROM room where room_board_id='" +  id + "' and room_name='"+  name + "'");
 			if (roomResultSet.next()) {
 				roomId = roomResultSet.getInt("room_id");
 			} else {
@@ -404,10 +435,10 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 					if (userResultSet.next()) {
 						for (Room room:user.getRooms()) {
 							int roomId;
-							if(!recordExists(connection,room.getId(),GET_ROOM_SQL)) {
+							if(!roomExists(connection,room.getId(),room.getRoomName(),GET_ROOM2_SQL)) {
 								roomId = createRoom(connection, room.getRoomName(), room.getId(), CREATE_ROOM_SQL);
 							} else {
-								roomId = getRoomId(connection,room.getId(),GET_ROOM_SQL);
+								roomId = getRoomIdAndName(connection,room.getId(),room.getRoomName(),GET_ROOM2_SQL);
 							}
 							int userId = userResultSet.getInt("user_id");
 							if(!userRoomSQLRecordExists(connection,userId,roomId,GET_USER_ROOM_SQL)) {
