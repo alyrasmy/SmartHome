@@ -23,7 +23,7 @@
           {{paper-input label="E-mail" value=user.email}}
           {{paper-input label="Old Password" type="password" value=oldPassword}}
           {{paper-input label="New Password" type="password" value=password}}
-          {{paper-input label="House Id" value=userHouseId}}
+          {{paper-input label="House Id" value=houseId}}
           {{#each rooms as |room|}}
               <div div class="md-actions" layout="row">
                   <div style='float:left'>
@@ -59,7 +59,7 @@
           {{paper-input label="Username" width=50  disabled=true value=user.username}}
           {{paper-input label="Password" type="password" disabled=true value=user.password}}
           {{paper-input label="E-mail" disabled=true value=user.email}}
-          {{paper-input label="House Id" disabled=true value=userHouseId}}
+          {{paper-input label="House Id" disabled=true value=houseId}}
           {{#each rooms as |room|}}
               <div div class="md-actions" layout="row">
                   <div style='float:left'>

@@ -28,7 +28,7 @@ export default Ember.Controller.extend({
 		return this.get("model.user").get("username");
 	}),
 
-	userHouseId: Ember.computed('model.user', function() {
+	houseId: Ember.computed('model.user', function() {
 		return this.get("model.user").get("house").slice()[0].get("id");
 	}),
 
@@ -50,7 +50,7 @@ export default Ember.Controller.extend({
 				var self = this;
 				if ( this.get("name") == null || this.get("username") == null ||
 				this.get("oldPassword") == null || this.get("password") == null ||
-				this.get("email") == null  || this.get("userHouseId") == null) {
+				this.get("email") == null  || this.get("houseId") == null) {
 					this.set("submitFailed", true);
 				} else {
 					if (this.get("oldPassword") == this.get("user").get("password")) {
@@ -77,7 +77,7 @@ export default Ember.Controller.extend({
 								$.ajax({
 										url: postUrl,
 										type: "POST",
-										data: this.getProperties("name", "username","password","email","userHouseId","roomsStringfy","isAdmin"),
+										data: this.getProperties("name", "username","password","email","houseId","roomsStringfy","isAdmin"),
 										dataType: 'text',
 										async: true,
 										success: function (response) {

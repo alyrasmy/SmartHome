@@ -405,11 +405,11 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 						userStatement.setString(2, user.getPassword());
 						userStatement.setString(3, user.getEmail());
 						int mainRoomId;
-						if(!recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL))
+						if(!roomExists(connection,user.getMainRoom().getId(),"House",GET_ROOM2_SQL))
 						{
-							mainRoomId = createRoom(connection, SENSORS_BOARD_NAME, SmartHomeService_V1.PHOTON_CORE_ID, CREATE_ROOM_SQL);
+							mainRoomId = createRoom(connection, user.getMainRoom().getRoomName(), user.getMainRoom().getId(), CREATE_ROOM_SQL);
 						} else {
-							mainRoomId = getRoomId(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL);
+							mainRoomId = getRoomIdAndName(connection,user.getMainRoom().getId(),"House",GET_ROOM2_SQL);
 						}
 						userStatement.setInt(4, mainRoomId);
 						userStatement.setString(5, user.getUsername());

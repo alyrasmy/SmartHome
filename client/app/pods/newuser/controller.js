@@ -16,7 +16,7 @@ export default Ember.Controller.extend({
 		return this.get("model.user");
 	}),
 
-	userHouseId: Ember.computed('model.user', function() {
+	houseId: Ember.computed('model.user', function() {
 		return this.get("model.user").get("house").slice()[0].get("id");
 	}),
 
@@ -51,9 +51,9 @@ export default Ember.Controller.extend({
 							isProcessing: true
 						});
 						if(this.get("hasAccessToHome")) {
-								this.get("userHouseId");
+								this.get("houseId");
 						} else {
-							this.set("userHouseId","")
+							this.set("houseId","")
 						}
 
 						this.get("userRooms").forEach(function(room) {
@@ -71,7 +71,7 @@ export default Ember.Controller.extend({
 								$.ajax({
 										url: postUrl,
 										type: "POST",
-										data: this.getProperties("name", "username","password","email","userHouseId","roomsStringfy","isAdmin"),
+										data: this.getProperties("name", "username","password","email","houseId","roomsStringfy","isAdmin"),
 										dataType: 'text',
 										async: true,
 										success: function (response) {
