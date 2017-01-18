@@ -23,6 +23,34 @@ export default Ember.Controller.extend({
 	}),
 
 	analyticType: Ember.computed('model.analyticType', function() {
-		return this.get("model.analyticType");
+		return this.get("model.analyticType").charAt(0).toUpperCase() + this.get("model.analyticType").slice(1);;
 	}),
+
+	data: Ember.computed('model', function() {
+		var temperatures = {
+			labels: this.get("model.temperatures").mapBy('timestamp'),
+			datasets: [{
+				label: '',
+				data: this.get("model.temperatures").mapBy("value")
+			}]
+		};
+		var humidities = {
+			labels: this.get("model.humidities").mapBy('timestamp'),
+			datasets: [{
+				label: '',
+				data: this.get("model.humidities").mapBy("value")
+			}]
+		};
+		var leds = {
+			labels: this.get("model.leds").mapBy('timestamp'),
+			datasets: [{
+				label: '',
+				data: this.get("model.leds").mapBy("value")
+			}]
+		};
+		if(this.get("analyticType") == "Temperature") {return temperatures;}
+		else if (this.get("analyticType") == "Humidity") {return humidities;}
+		else if (this.get("analyticType") == "Led") {return leds;}
+	})
+
 });

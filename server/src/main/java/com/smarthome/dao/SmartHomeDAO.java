@@ -3,6 +3,7 @@ package com.smarthome.dao;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.List;
 
 import com.smarthome.model.Humidity;
 import com.smarthome.model.Led;
@@ -25,4 +26,5 @@ public interface SmartHomeDAO {
 	public void createUser(User user) throws DAOException;
 	public User getUser(String userName) throws SQLException;
 	public boolean isUser(String username, String password) throws SQLException ;
+	public List<User> getAllUserInHouse(String houseId) throws SQLException;
 }

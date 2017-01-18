@@ -16,8 +16,19 @@ export default Ember.Route.extend({
     let self = this;
     return Ember.RSVP.hash({
         user: self.get('store').find('user', self.controllerFor("application").get("username")),
-        temperatures: self.get('store').find('temperature'),
-        humidities: self.get('store').find('humidity'),
+        temperatures: self.get('store').find('temperature', {
+          startDate: param.startDate,
+          endDate: param.endDate
+        }),
+        humidities: self.get('store').find('humidity', {
+          startDate: param.startDate,
+          endDate: param.endDate
+        }),
+        leds: self.get('store').find('led', {
+          startDate: param.startDate,
+          endDate: param.endDate,
+          boardId: param.roomId
+        }),
         analyticType:param.analytic_type
       });
   },

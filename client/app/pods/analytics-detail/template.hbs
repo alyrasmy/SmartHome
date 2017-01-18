@@ -4,15 +4,29 @@
           <img src="assets/Logo2.jpg" alt="Logo" style="width:30%;height:30%;">
       </div>
 
-      <h2>DETAILSSSS</h2>
-      <h2>{{startDate}}</h2>
-      <h2>{{endDate}}</h2>
-      <h2>{{roomId}}</h2>
-      <h2>{{analyticType}}</h2>
-       <BR></BR>
-       <BR></BR>
 
+      <h2>{{analyticType}} Analytics</h2>
+      <BR></BR>
+      <BR></BR>
 
+      {{#ez-tabs}}
+        {{#ez-tab-list}}
+          {{#ez-tab}}Bar Chart{{/ez-tab}}
+          {{#ez-tab}}Line Chart{{/ez-tab}}
+          {{#ez-tab}}Pie Chart{{/ez-tab}}
+        {{/ez-tab-list}}
+        {{#ez-tab-panel-list}}
+          {{#ez-tab-panel}}
+              {{ember-chart type='Bar' data=data legend=true height=500 width=800}}
+          {{/ez-tab-panel}}
+          {{#ez-tab-panel}}
+              {{ember-chart type='line' data=data legend=true height=500 width=800}}
+          {{/ez-tab-panel}}
+          {{#ez-tab-panel}}
+              {{ember-chart type='Bar' data=data legend=true height=500 width=800}}
+          {{/ez-tab-panel}}
+        {{/ez-tab-panel-list}}
+      {{/ez-tabs}}
 
     {{/paper-card-content}}
   {{/paper-card}}

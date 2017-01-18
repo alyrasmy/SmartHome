@@ -220,6 +220,36 @@ public class SmartHomeRESTService {
 		}
 	}
 	
+	//http response for a list of all users in house usage readings
+	@GET
+	@Path("/users")
+	@Produces({MediaType.APPLICATION_JSON})
+	public Response getAllUserInHouse(@QueryParam("houseId") String houseId) throws SQLException
+	{
+		try {
+			if(houseId != null) {
+				List<User> usersInHouse = new ArrayList<User>();
+				usersInHouse = (List<User>) smartHomeDAO.getAllUserInHouse(houseId);
+				return Response.ok()
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity(convertUserToJSON(usersInHouse, false)).build();
+			} else {
+				return Response.status(SC_INTERNAL_SERVER_ERROR)
+						.header("Access-Control-Allow-Origin", "*")
+						.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+						.entity("Query Param houseId is undefined").build();
+			}
+		} catch(RuntimeException e){
+			e.printStackTrace();
+			return Response.status(SC_INTERNAL_SERVER_ERROR)
+					.header("Access-Control-Allow-Origin", "*")
+					.header("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT")
+					.entity(GSON.toJson(e.getStackTrace())).build();
+		}
+	}
+	
+	
 	//http response for a user
 	@GET
 	@Path("/users/{user_id}")
@@ -513,9 +543,8 @@ public class SmartHomeRESTService {
 		
 	}
 	
-	private StreamingOutput convertUserToJSON(final List<User> usersCollection, boolean hasMany)
+	private StreamingOutput convertUserToJSON(final List<User> usersCollection, boolean oneRecord)
 	{
-		final boolean oneRecord = hasMany;
 		return new StreamingOutput(){
 
 			@Override

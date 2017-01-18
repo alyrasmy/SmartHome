@@ -32,6 +32,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	private final String CREATE_USER_SQL = "insert into user (user_name, user_username, email, password, isadmin, main_room) values (?, ?, ?, ?, ?, ?);";
 	private final String UPDATE_USER_SQL = "update user set user_name=?, password=?, email=?, main_room=? where user_username=?;";
 	private final String GET_USER_SQL = "select * from user where user_username=?;";
+	private final String GET_ALLUSERS_SQL = "select * from user where main_room=?;";
 	
 	private final String GET_USER_ROOM_SQL = "select * from user_room where user_id=? and room_id=?;";
 	private final String CREATE_USER_ROOM_SQL = "insert into user_room (user_id, room_id) values (?, ?);";
@@ -421,11 +422,11 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 						userStatement.setBoolean(5, user.isAdmin());
 						
 						int mainRoomId;
-						if(!recordExists(connection,user.getMainRoom().getId(),GET_ROOM_SQL))
+						if(!roomExists(connection,user.getMainRoom().getId(),"House",GET_ROOM2_SQL))
 						{
 							mainRoomId = createRoom(connection, user.getMainRoom().getRoomName(), user.getMainRoom().getId(), CREATE_ROOM_SQL);
 						} else {
-							mainRoomId = getRoomId(connection,user.getMainRoom().getId(),GET_ROOM_SQL);
+							mainRoomId = getRoomIdAndName(connection,user.getMainRoom().getId(),"House",GET_ROOM2_SQL);
 						}
 						userStatement.setInt(6, mainRoomId);
 						userStatement.execute();
@@ -493,6 +494,39 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 				}
 			}
 		}
+	}
+
+	@Override
+	public List<User> getAllUserInHouse(String houseId) throws SQLException {
+		int roomId = getRoomIdAndName(connection,houseId,"House",GET_ROOM2_SQL);
+		List<User> users = new ArrayList<User>();
+		try(PreparedStatement statement = connection.prepareStatement(GET_ALLUSERS_SQL);) {	
+			statement.setInt(1, roomId);	
+			try(ResultSet searchIdResultSet = statement.executeQuery();) {
+				while(searchIdResultSet.next()) {
+					User user =  new User();
+					int id = searchIdResultSet.getInt("user_id");
+					String name = searchIdResultSet.getString("user_name");
+					String username = searchIdResultSet.getString("user_username");
+					String password = searchIdResultSet.getString("password");
+					String email = searchIdResultSet.getString("email");
+					boolean isAdmin = searchIdResultSet.getBoolean("isadmin");
+					user.setId(Integer.toString(id));
+					user.setName(name);
+					user.setUsername(username);
+					user.setPassword(password);
+					user.setEmail(email);
+					user.setAdmin(isAdmin);
+					
+					List<Room> rooms = (List<Room>) getRooms(connection, id, GET_ALLROOM_SQL);
+					Room mainRoom = getRoomObject(searchIdResultSet.getInt("main_room"));
+					user.setmainRoom(mainRoom);
+					user.setRooms(rooms);
+					users.add(user);
+				}
+			}
+		}
+		return users;
 	}
 	
 }
