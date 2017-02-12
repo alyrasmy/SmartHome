@@ -3,10 +3,7 @@ package com.smarthome.schedule;
 import java.sql.Timestamp;
 import java.util.TimerTask;
 
-import org.apache.commons.dbcp2.BasicDataSource;
-
 import com.smarthome.dao.DAOException;
-import com.smarthome.dao.JDBCSmartHomeDAO;
 import com.smarthome.dao.SmartHomeDAO;
 import com.smarthome.model.Led;
 import com.smarthome.service.SmartHomeService_V1;

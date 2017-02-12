@@ -22,7 +22,6 @@ import com.smarthome.service.SmartHomeService_V1;
 
 public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	private static Connection connection = null;
-	private BasicDataSource basicDataSource;
 	private final String SENSORS_BOARD_NAME = "Sensors room";
 	
 	private final String CREATE_TEMPERATURE_SQL = "insert into temperature (temperature_value, timestamp, board_id) values (?, ?, ?);";
@@ -46,7 +45,6 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	public JDBCSmartHomeDAO(BasicDataSource basicDataSource) {
 		try {
 			connection = basicDataSource.getConnection();
-			this.basicDataSource = basicDataSource;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -193,8 +191,9 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	@Override
 	public void createTemperature(Temperature temperature, Timestamp timestamp) throws DAOException {
 		int roomId;
-		try(PreparedStatement createTemperatureStatement = connection.prepareStatement(CREATE_TEMPERATURE_SQL, Statement.RETURN_GENERATED_KEYS);
-		) {
+		ResultSet temperatureResultSet = null;
+		PreparedStatement temperatureStatement = null;
+		try(PreparedStatement createTemperatureStatement = connection.prepareStatement(CREATE_TEMPERATURE_SQL, Statement.RETURN_GENERATED_KEYS);) {
 				if(!recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL))
 				{
 					roomId = createRoom(connection, SENSORS_BOARD_NAME, SmartHomeService_V1.PHOTON_CORE_ID, CREATE_ROOM_SQL);
@@ -202,17 +201,21 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 					roomId = getRoomId(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL);
 				}
 			
-				PreparedStatement temperatureStatement=createTemperatureStatement;
+				temperatureStatement = createTemperatureStatement;
 				temperatureStatement.setString(1, temperature.getValue());
 				temperatureStatement.setTimestamp(2, timestamp);
 				temperatureStatement.setInt(3, roomId);
 				temperatureStatement.execute();
-				ResultSet temperatureResultSet = connection.createStatement().executeQuery("SELECT * FROM temperature where timestamp='" + timestamp.toString().split("\\.")[0] +"'");
+				temperatureResultSet = connection.createStatement().executeQuery("SELECT * FROM temperature where timestamp='" + timestamp.toString().split("\\.")[0] +"'");
 				if (!temperatureResultSet.next()) {
 					throw new RuntimeException("Expected timestamp not found");
 				}
+				createTemperatureStatement.close();
 		} catch (SQLException sqlException) {
 			throw new DAOException("Error creating temperature.", sqlException);
+		} finally {
+			try { temperatureResultSet.close(); } catch (Exception e){}
+			try { temperatureStatement.close(); } catch (Exception e){}
 		}
 	}
 
@@ -231,6 +234,9 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 			temperatures.add(temperature);
 		}
 		Collections.sort(temperatures);
+		temperatureStatement.close();
+		temperatureResultSet.close();
+		
 		return temperatures;
 	}
 	
@@ -253,6 +259,8 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 				temperatures.add(temperature);
 			}
 			Collections.sort(temperatures);
+			temperatureStatement.close();
+			temperatureResultSet.close();
 		}
 		return temperatures;
 	}
@@ -260,6 +268,8 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	@Override
 	public void createHumidity(Humidity humidity, Timestamp timestamp) throws DAOException {
 		int roomId;
+		PreparedStatement humidityStatement = null;
+		ResultSet humidityResultSet = null;
 		try(PreparedStatement createHumidityStatement = connection.prepareStatement(CREATE_HUMIDITY_SQL, Statement.RETURN_GENERATED_KEYS);
 		) {
 				if(!recordExists(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL))
@@ -269,18 +279,22 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 					roomId = getRoomId(connection,SmartHomeService_V1.PHOTON_CORE_ID,GET_ROOM_SQL);
 				}
 			
-				PreparedStatement humidityStatement = createHumidityStatement;
+				humidityStatement = createHumidityStatement;
 				humidityStatement.setString(1, humidity.getValue());
 				humidityStatement.setTimestamp(2, timestamp);
 				humidityStatement.setInt(3, roomId);
 				humidityStatement.execute();
 				
-				ResultSet humidityResultSet = connection.createStatement().executeQuery("SELECT * FROM humidity where timestamp='" + timestamp.toString().split("\\.")[0] +"'");
+				humidityResultSet = connection.createStatement().executeQuery("SELECT * FROM humidity where timestamp='" + timestamp.toString().split("\\.")[0] +"'");
 				if (!humidityResultSet.next()) {
 					throw new RuntimeException("Expected timestamp not found");
 				}
+				createHumidityStatement.close();
 		} catch (SQLException sqlException) {
 			throw new DAOException("Error creating humidity.", sqlException);
+		} finally {
+			try { humidityStatement.close(); } catch (Exception e){}
+			try { humidityResultSet.close(); } catch (Exception e){}
 		}
 	}
 
@@ -327,6 +341,8 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	@Override
 	public void createLed(Led led, Timestamp timestamp, String sparkCoreId) throws DAOException {
 		int roomId;
+		PreparedStatement ledStatement = null;
+		ResultSet ledResultSet = null;
 		try(PreparedStatement createLedStatement = connection.prepareStatement(CREATE_LED_SQL, Statement.RETURN_GENERATED_KEYS);
 		) {
 				if(!recordExists(connection,sparkCoreId,GET_ROOM_SQL))
@@ -336,18 +352,22 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 					roomId = getRoomId(connection,sparkCoreId,GET_ROOM_SQL);
 				}
 			
-				PreparedStatement ledStatement = createLedStatement;
+				ledStatement = createLedStatement;
 				ledStatement.setString(1, led.getValue());
 				ledStatement.setTimestamp(2, timestamp);
 				ledStatement.setInt(3, roomId);
 				ledStatement.execute();
 				
-				ResultSet ledResultSet = connection.createStatement().executeQuery("SELECT * FROM led where timestamp='" + timestamp.toString().split("\\.")[0] + "'");
+				ledResultSet = connection.createStatement().executeQuery("SELECT * FROM led where timestamp='" + timestamp.toString().split("\\.")[0] + "'");
 				if (!ledResultSet.next()) {
 					throw new RuntimeException("Expected timestamp not found");
 				}
+				createLedStatement.close();
 		} catch (SQLException sqlException) {
 			throw new DAOException("Error creating led.", sqlException);
+		} finally {
+			try { ledStatement.close(); } catch (Exception e){}
+			try { ledResultSet.close(); } catch (Exception e){}
 		}
 	}
 
@@ -394,10 +414,13 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 
 	@Override
 	public void createUser(User user) throws DAOException {
+		PreparedStatement userStatement = null;
+		ResultSet userResultSet = null;
+		
 		try(PreparedStatement createUserStatement = connection.prepareStatement(CREATE_USER_SQL, Statement.RETURN_GENERATED_KEYS);
 			PreparedStatement updateUserStatement = connection.prepareStatement(UPDATE_USER_SQL, Statement.RETURN_GENERATED_KEYS);
 			) {
-					PreparedStatement userStatement=createUserStatement;
+					userStatement = createUserStatement;
 					if(recordExists(connection,user.getUsername(),GET_USER_SQL))
 					{
 						userStatement=updateUserStatement;
@@ -432,7 +455,7 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 						userStatement.execute();
 					}
 					
-					ResultSet userResultSet = connection.createStatement().executeQuery("SELECT * FROM user where user_username='" + user.getUsername() + "'");
+					userResultSet = connection.createStatement().executeQuery("SELECT * FROM user where user_username='" + user.getUsername() + "'");
 					if (userResultSet.next()) {
 						for (Room room:user.getRooms()) {
 							int roomId;
@@ -451,6 +474,9 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 					}
 			} catch (SQLException sqlException) {
 				throw new DAOException("Error creating user.", sqlException);
+			} finally {
+				try { userStatement.close(); } catch (Exception e){}
+				try { userResultSet.close(); } catch (Exception e){}
 			}
 	}
 

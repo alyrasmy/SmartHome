@@ -1,8 +1,6 @@
 package com.smarthome.rest;
 
 import static org.apache.http.HttpStatus.SC_INTERNAL_SERVER_ERROR;
-import static org.apache.http.HttpStatus.SC_ACCEPTED;
-import static org.apache.http.HttpStatus.SC_OK;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
@@ -26,6 +23,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.StreamingOutput;
+
+import org.apache.commons.dbcp2.BasicDataSource;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -47,8 +46,6 @@ import com.smarthome.schedule.HumiditySchedule;
 import com.smarthome.schedule.LedSchedule;
 import com.smarthome.schedule.TemperatureSchedule;
 import com.smarthome.service.SmartHomeService_V1;
-
-import org.apache.commons.dbcp2.BasicDataSource;
 
 @Path("/api/smarthome")
 public class SmartHomeRESTService {
