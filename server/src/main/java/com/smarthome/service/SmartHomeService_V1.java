@@ -22,7 +22,7 @@ public class SmartHomeService_V1 {
 		Temperature temperature = null;
 		try {
 			String response = getHTML(url);
-			String tempValue = response.split("\"result\": ")[1].split(",")[0];
+			String tempValue = response.split("\"result\":")[1].split(",")[0];
 			temperature = new Temperature();
 			temperature.setValue(tempValue);
 		} catch (Exception e) {
@@ -50,7 +50,7 @@ public class SmartHomeService_V1 {
 		Led led = null;
 		try {
 			String response = getHTML(url);
-			String ledValue = response.split("\"result\": ")[1].split(",")[0];
+			String ledValue = response.split("\"result\":")[1].split(",")[0];
 			led = new Led();
 			led.setValue(ledValue);
 		} catch (Exception e) {
