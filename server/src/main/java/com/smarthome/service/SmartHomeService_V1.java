@@ -36,7 +36,7 @@ public class SmartHomeService_V1 {
 		Humidity humidity = null;
 		try {
 			String response = getHTML(url);
-			String humidityValue = response.split("\"result\": ")[1].split(",")[0];
+			String humidityValue = response.split("\"result\":")[1].split(",")[0];
 			humidity = new Humidity();
 			humidity.setValue(humidityValue);
 		} catch (Exception e) {
