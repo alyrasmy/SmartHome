@@ -1,21 +1,26 @@
 <html>
+    <body class="blue-grey darken-4">
       {{#if session.isAuthenticated}}
         {{#paper-nav-container class="site-nav-container"}}
-            {{#paper-sidenav class="md-sidenav-left md-whiteframe-z2 site-sidenav" }}
-              {{#paper-toolbar class="site-content-toolbar"}}
-                {{#link-to 'dashboard' invokeAction=(action 'gotoHome')}} 
-                    <div class="md-toolbar-tools">
-                      <div class="logo">
-                        <img src="assets/Logo.png" alt="Logo" style="width:200px;height:50px;">
-                      </div>
-                    </div>
-                {{/link-to}}
-              {{/paper-toolbar}}
-              {{#paper-content}}
+            {{#paper-sidenav class="md-sidenav-left blue-grey darken-1 site-sidenav" }}
+                <nav>
+                  <div class="nav-wrapper blue-grey darken-4">
+                    <a href="" class="brand-logo">
+                      {{#link-to 'dashboard' invokeAction=(action 'gotoHome')}}
+                          <div class="md-toolbar-tools">
+                            <div class="logo">
+                              <img src="assets/Logo.png" alt="Logo" style="width:200px;height:50px;">
+                            </div>
+                          </div>
+                      {{/link-to}}
+                    </a>
+                  </div>
+                </nav>
+              {{#paper-content class="blue-grey darken-1 white-text"}}
                 {{#paper-list}}
                   {{#each routes as |item|}}
                     {{#paper-item action="transitionTo" param=item}}
-                      {{paper-icon icon=item.icon size="lg"}}
+                      <i class="Large material-icons white-text">{{item.icon}}</i>
                       {{item.alias}}
                     {{/paper-item}}
                   {{/each}}
@@ -24,16 +29,17 @@
             {{/paper-sidenav}}
 
             <div layout="column" tabindex="-1" role="main" flex>
-              {{#paper-toolbar}}
-
-                <div class="md-toolbar-tools">
-                  {{#paper-sidenav-toggle as |toggle| }}
-                    {{#paper-button target=toggle action="toggleMenu" icon-button=true}}{{paper-icon icon="menu"}}{{/paper-button}}
-                  {{/paper-sidenav-toggle}}
-                  <span class="md-breadcrumb-page">
-                  </span>
-                </div>
-              {{/paper-toolbar}}
+              <nav>
+                  <div class="nav-wrapper blue-grey darken-4">
+                    <div class="md-toolbar-tools">
+                      {{#paper-sidenav-toggle as |toggle| }}
+                        {{#paper-button target=toggle action="toggleMenu" icon-button=true}}{{paper-icon icon="menu"}}{{/paper-button}}
+                      {{/paper-sidenav-toggle}}
+                      <span class="md-breadcrumb-page">
+                      </span>
+                    </div>
+                  </div>
+              </nav>
 
               {{#paper-content class="md-padding no-overflow-x"}}
                 {{outlet}}
@@ -86,5 +92,5 @@
 
   </body>
       {{/if}}
-
+  </body>
 </html>

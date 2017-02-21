@@ -27,6 +27,7 @@
     "pretender": "~0.9.0",
     "qunit": "~1.18.0",
     "bootstrap": "~3.3.5",
-    "materialize": "0.97.0"
+    "materialize": "0.97.0",
+    "slick-carousel": "~1.6.0"
   }
 }

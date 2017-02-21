@@ -1,4 +1,4 @@
-{{#paper-card}}
+{{#paper-card }}
   {{#paper-card-content}}
     <div style="display:flex;justify-content:center;">
         <img src="assets/Logo2.jpg" alt="Logo" style="width:30%;height:30%;">
@@ -23,6 +23,12 @@
           {{paper-input label="E-mail" value=user.email}}
           {{paper-input label="Old Password" type="password" value=oldPassword}}
           {{paper-input label="New Password" type="password" value=password}}
+          {{paper-input label="Address" value=address}}
+          {{paper-input label="City" value=user.city}}
+          {{paper-input label="Temperature Threshold" value=user.tempthreshold}}
+          {{paper-input label="Humidity Threshold" value=user.humidthreshold}}
+          {{paper-input label="LED Threshold" value=user.ledthreshold}}
+          {{paper-input label="CameraId" value=user.camera}}
           {{paper-input label="House Id" value=houseId}}
           {{#each rooms as |room|}}
               <div div class="md-actions" layout="row">
@@ -59,7 +65,13 @@
           {{paper-input label="Username" width=50  disabled=true value=user.username}}
           {{paper-input label="Password" type="password" disabled=true value=user.password}}
           {{paper-input label="E-mail" disabled=true value=user.email}}
-          {{paper-input label="House Id" disabled=true value=houseId}}
+          {{paper-input label="Address" disabled=true  value=user.address}}
+          {{paper-input label="City" disabled=true  value=user.city}}
+          {{paper-input label="Temperature Threshold" disabled=true  value=user.tempthreshold}}
+          {{paper-input label="Humidity Threshold" disabled=true  value=user.humidthreshold}}
+          {{paper-input label="LED Threshold" disabled=true  value=user.ledthreshold}}
+          {{paper-input label="CameraId" disabled=true  value=user.camera}}
+          {{paper-input label="House Id" disabled=true  disabled=true value=houseId}}
           {{#each rooms as |room|}}
               <div div class="md-actions" layout="row">
                   <div style='float:left'>

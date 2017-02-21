@@ -28,8 +28,8 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 	private final String CREATE_HUMIDITY_SQL = "insert into humidity (humidity_value, timestamp, board_id) values (?, ?, ?);";
 	private final String CREATE_LED_SQL = "insert into led (led_usage, timestamp, board_id) values (?, ?, ?);";
 	
-	private final String CREATE_USER_SQL = "insert into user (user_name, user_username, email, password, isadmin, main_room) values (?, ?, ?, ?, ?, ?);";
-	private final String UPDATE_USER_SQL = "update user set user_name=?, password=?, email=?, main_room=? where user_username=?;";
+	private final String CREATE_USER_SQL = "insert into user (user_name, user_username, email, password, isadmin, main_room, temp_threshold, humid_threshold, led_threshold, city, address, camera) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+	private final String UPDATE_USER_SQL = "update user set user_name=?, password=?, email=?, main_room=?, temp_threshold=?, humid_threshold=?, led_threshold=?, city=?, address=?, camera=? where user_username=?;";
 	private final String GET_USER_SQL = "select * from user where user_username=?;";
 	private final String GET_ALLUSERS_SQL = "select * from user where main_room=?;";
 	
@@ -435,7 +435,13 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 							mainRoomId = getRoomIdAndName(connection,user.getMainRoom().getId(),"House",GET_ROOM2_SQL);
 						}
 						userStatement.setInt(4, mainRoomId);
-						userStatement.setString(5, user.getUsername());
+						userStatement.setString(5, user.getTemp_threshold());
+						userStatement.setString(6, user.getHumid_threshold());
+						userStatement.setString(7, user.getLed_threshold());
+						userStatement.setString(8, user.getCity());
+						userStatement.setString(9, user.getAddress());
+						userStatement.setString(10, user.getCamera());
+						userStatement.setString(11, user.getUsername());
 						userStatement.execute();
 					} else {
 						userStatement.setString(1, user.getName());
@@ -452,6 +458,12 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 							mainRoomId = getRoomIdAndName(connection,user.getMainRoom().getId(),"House",GET_ROOM2_SQL);
 						}
 						userStatement.setInt(6, mainRoomId);
+						userStatement.setString(6, user.getTemp_threshold());
+						userStatement.setString(7, user.getHumid_threshold());
+						userStatement.setString(8, user.getLed_threshold());
+						userStatement.setString(9, user.getCity());
+						userStatement.setString(10, user.getAddress());
+						userStatement.setString(11, user.getCamera());
 						userStatement.execute();
 					}
 					
@@ -493,12 +505,24 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 			String password = userResultSet.getString("password");
 			String email = userResultSet.getString("email");
 			boolean isAdmin = userResultSet.getBoolean("isadmin");
+			String temp_threshold = userResultSet.getString("temp_threshold");
+			String humid_threshold = userResultSet.getString("humid_threshold");
+			String led_threshold = userResultSet.getString("led_threshold");
+			String city = userResultSet.getString("city");
+			String address = userResultSet.getString("address");
+			String camera = userResultSet.getString("camera");
 			user.setId(Integer.toString(id));
 			user.setName(name);
 			user.setUsername(username);
 			user.setPassword(password);
 			user.setEmail(email);
 			user.setAdmin(isAdmin);
+			user.setTemp_threshold(temp_threshold);
+			user.setHumid_threshold(humid_threshold);
+			user.setLed_threshold(led_threshold);
+			user.setCity(city);
+			user.setAddress(address);
+			user.setCamera(camera);
 			
 			List<Room> rooms = (List<Room>) getRooms(connection, id, GET_ALLROOM_SQL);
 			Room mainRoom = getRoomObject(userResultSet.getInt("main_room"));
@@ -537,12 +561,24 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 					String password = searchIdResultSet.getString("password");
 					String email = searchIdResultSet.getString("email");
 					boolean isAdmin = searchIdResultSet.getBoolean("isadmin");
+					String temp_threshold = searchIdResultSet.getString("temp_threshold");
+					String humid_threshold = searchIdResultSet.getString("humid_threshold");
+					String led_threshold = searchIdResultSet.getString("led_threshold");
+					String city = searchIdResultSet.getString("city");
+					String address = searchIdResultSet.getString("address");
+					String camera = searchIdResultSet.getString("camera");
 					user.setId(Integer.toString(id));
 					user.setName(name);
 					user.setUsername(username);
 					user.setPassword(password);
 					user.setEmail(email);
 					user.setAdmin(isAdmin);
+					user.setTemp_threshold(temp_threshold);
+					user.setHumid_threshold(humid_threshold);
+					user.setLed_threshold(led_threshold);
+					user.setCity(city);
+					user.setAddress(address);
+					user.setCamera(camera);
 					
 					List<Room> rooms = (List<Room>) getRooms(connection, id, GET_ALLROOM_SQL);
 					Room mainRoom = getRoomObject(searchIdResultSet.getInt("main_room"));

@@ -42,7 +42,9 @@ export default Ember.Controller.extend({
 				var self = this;
 				if ( this.get("name") == null || this.get("username") == null ||
 				this.get("password") == null || this.get("cPassword") == null ||
-				this.get("email") == null) {
+				this.get("email") == null || this.get("tempthreshold") == null ||
+				this.get("humidthreshold") == null || this.get("ledthreshold") == null ||
+				this.get("address") == null || this.get("city") == null || this.get("camera") == null) {
 					this.set("submitFailed", true);
 				} else {
 					if (this.get("password") == this.get("cPassword")) {
@@ -71,7 +73,10 @@ export default Ember.Controller.extend({
 								$.ajax({
 										url: postUrl,
 										type: "POST",
-										data: this.getProperties("name", "username","password","email","houseId","roomsStringfy","isAdmin"),
+										data: this.getProperties("name", "username","password",
+										"email","houseId","roomsStringfy","isAdmin","tempthreshold",
+										"humidthreshold","ledthreshold","address","city",
+										"camera"),
 										dataType: 'text',
 										async: true,
 										success: function (response) {

@@ -9,23 +9,22 @@
 
        <p style="margin-left: 40px">
        <h4>Temperature</h4>
-            {{paper-input label="Start Date (E.G. 2017/01/17)"  width=80 value=temperatureStartDate}}
-            {{paper-input label="End Date (E.G. 2017/01/17)"  width=80 value=temperatureEndDate}}
-
+            <label>Start Date:{{pikaday-input theme='dark-theme' value=temperatureStartDate onSelection=(action (mut temperatureStartDate)) format='YYYY/MM/DD'}}</label>
+            <label style="margin-left: 80px" >End Date:{{pikaday-input theme='dark-theme' value=temperatureEndDate onSelection=(action (mut temperatureEndDate)) format='YYYY/MM/DD'}}</label>
             <div div class="md-actions" layout="row" layout-align="end center">
                 <div style='float:left'>
-                  {{#link-to 'analytics-detail' (query-params startDate=temperatureStartDate endDate=temperatureEndDate roomId=houseId) invokeAction=(action 'temperatureAnalytics')}} View {{/link-to}}
+                  {{#link-to 'analytics-detail' (query-params startDate=temperatureStartDateString endDate=temperatureEndDateString roomId=houseId) invokeAction=(action 'temperatureAnalytics')}} View {{/link-to}}
                 </div>
             </div>
 
         <BR></BR>
-        <h4>Humidity</h4>
-            {{paper-input label="Start Date (E.G. 2017/01/17)"  width=80 value=humidityStartDate}}
-            {{paper-input label="End Date (E.G. 2017/01/17)"  width=80 value=humidityEndDate}}
 
+        <h4>Humidity</h4>
+            <label>Start Date:{{pikaday-input theme='dark-theme' value=humidityStartDate onSelection=(action (mut humidityStartDate)) format='YYYY/MM/DD'}}</label>
+            <label style="margin-left: 80px" >End Date:{{pikaday-input theme='dark-theme' value=humidityEndDate onSelection=(action (mut humidityEndDate)) format='YYYY/MM/DD'}}</label>
             <div div class="md-actions" layout="row" layout-align="end center">
               <div style='float:left'>
-                {{#link-to 'analytics-detail' (query-params startDate=humidityStartDate endDate=humidityEndDate roomId=houseId) invokeAction=(action 'humidityAnalytics')}} View {{/link-to}}
+                {{#link-to 'analytics-detail' (query-params startDate=humidityStartDateString endDate=humidityEndDateString roomId=houseId) invokeAction=(action 'humidityAnalytics')}} View {{/link-to}}
               </div>
             </div>
         </p>
@@ -34,16 +33,15 @@
 
        <h2>Rooms</h2>
        <BR></BR>
+       {{ledDateChanged}}
        <p style="margin-left: 40px">
-         {{#each user.rooms as |room|}}
+         {{#each rooms as |room|}}
             <h4>{{room.name}}</h4>
-            <h4>LED</h4>
-            {{paper-input label="Start Date (E.G. 2017/01/17)"  width=80 value=room.ledStartDate}}
-            {{paper-input label="End Date (E.G. 2017/01/17)"  width=80 value=room.ledEndDate}}
-
+            <label>Start Date:{{pikaday-input theme='dark-theme' value=room.ledStartDate onSelection=(action (mut room.ledStartDate)) onClose=(action 'updateRoomDateString') format='YYYY/MM/DD'}}</label>
+            <label style="margin-left: 80px" >End Date:{{pikaday-input theme='dark-theme' value=room.ledEndDate onSelection=(action (mut room.ledEndDate)) onClose=(action 'updateRoomDateString') format='YYYY/MM/DD'}}</label>
             <div div class="md-actions" layout="row" layout-align="end center">
                 <div style='float:left'>
-                  {{#link-to 'analytics-detail' (query-params startDate=room.ledStartDate endDate=room.ledEndDate roomId=room.id) invokeAction=(action 'ledAnalytics')}} View {{/link-to}}
+                  {{#link-to 'analytics-detail' (query-params startDate=room.ledStartDateString endDate=room.ledEndDateString roomId=room.id) invokeAction=(action 'ledAnalytics')}} View {{/link-to}}
                 </div>
             </div>
          {{/each}}

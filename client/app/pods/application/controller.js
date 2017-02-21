@@ -13,42 +13,42 @@ export default Ember.Controller.extend({
 	routes: Ember.computed('model.snapshots.[]', 'model.configuration', function() {
 		var routes = [{
 			route: 'profile',
-			alias: 'Profile',
-			icon: 'person'
+			alias: '  Profile',
+			icon: 'perm_identity'
 		}, {
 			route: 'analytics',
-			alias: 'Analytics',
-			icon: 'layers'
+			alias: '  Analytics',
+			icon: 'equalizer'
 		}, {
 			route: 'control',
-			alias: 'Control',
-			icon: 'settings'
+			alias: '  Control',
+			icon: 'settings_remote'
 		}, {
 			route: 'logout',
-			alias: 'Sign Out',
-			icon: 'exit-to-app'
+			alias: '  Sign Out',
+			icon: 'lock_outline'
 		}];
 		if(this.get("isAdmin")) {
 			routes = [{
 				route: 'profile',
-				alias: 'Profile',
-				icon: 'person'
+				alias: '  Profile',
+				icon: 'perm_identity'
 			}, {
 				route: 'analytics',
-				alias: 'Analytics',
-				icon: 'layers'
+				alias: '  Analytics',
+				icon: 'equalizer'
 			}, {
 				route: 'control',
-				alias: 'Control',
-				icon: 'settings'
+				alias: '  Control',
+				icon: 'settings_remote'
 			}, {
 				route: 'newuser',
-				alias: 'Add New User',
-				icon: 'person'
+				alias: '  Add New User',
+				icon: 'queue'
 			}, {
 				route: 'logout',
-				alias: 'Sign Out',
-				icon: 'exit-to-app'
+				alias: '  Sign Out',
+				icon: 'lock_outline'
 			}];
 		}
 		return routes;

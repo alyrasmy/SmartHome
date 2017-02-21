@@ -29,7 +29,8 @@ export default Ember.Route.extend({
           endDate: param.endDate,
           boardId: param.roomId
         }),
-        analyticType:param.analytic_type
+        analyticType:param.analytic_type,
+        ledBoardId:param.roomId
       });
   },
   beforeModel: function() {

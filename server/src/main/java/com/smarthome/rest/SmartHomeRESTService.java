@@ -345,7 +345,10 @@ public class SmartHomeRESTService {
 	public Response addUser(@FormParam("isAdmin") boolean isAdmin, @FormParam("name") String name
 			, @FormParam("username") String username, @FormParam("password") String password
 			, @FormParam("email") String email, @FormParam("houseId") String houseId
-			, @FormParam("roomsStringfy") String roomsStringfy) {
+			, @FormParam("roomsStringfy") String roomsStringfy, @FormParam("temp_threshold") String temp_threshold
+			, @FormParam("humid_threshold") String humid_threshold, @FormParam("led_threshold") String led_threshold
+			, @FormParam("city") String city, @FormParam("address") String address
+			, @FormParam("camera") String camera) {
 
 		List<Room> allRooms = new ArrayList<Room>();
         JsonParser parser = new JsonParser();
@@ -368,6 +371,13 @@ public class SmartHomeRESTService {
 		user.setPassword(password);
 		user.setRooms(allRooms);
 		user.setUsername(username);
+		user.setTemp_threshold(temp_threshold);
+		user.setHumid_threshold(humid_threshold);
+		user.setLed_threshold(led_threshold);
+		user.setCity(city);
+		user.setAddress(address);
+		user.setCamera(camera);
+		
 		try {
 			smartHomeDAO.createUser(user);
 			return Response.ok()
@@ -571,6 +581,12 @@ public class SmartHomeRESTService {
 					jsonWriter.name("password").value(user.getPassword());
 					jsonWriter.name("email").value(user.getEmail());
 					jsonWriter.name("isadmin").value(user.isAdmin());
+					jsonWriter.name("tempthreshold").value(user.getTemp_threshold());
+					jsonWriter.name("humidthreshold").value(user.getHumid_threshold());
+					jsonWriter.name("ledthreshold").value(user.getLed_threshold());
+					jsonWriter.name("city").value(user.getCity());
+					jsonWriter.name("address").value(user.getAddress());
+					jsonWriter.name("camera").value(user.getCamera());
 					jsonWriter.endObject(); //end the attributes object
 
 					jsonWriter.name("relationships");

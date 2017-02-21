@@ -44,13 +44,34 @@ export default Ember.Controller.extend({
 			return 	JSON.stringify(this.get("rooms"));
 	}),
 
+	tempthreshold: Ember.computed('model.user', function() {
+			return this.get("model.user").get("tempthreshold");
+	}),
+	humidthreshold: Ember.computed('model.user', function() {
+			return this.get("model.user").get("humidthreshold");
+	}),
+	ledthreshold: Ember.computed('model.user', function() {
+			return this.get("model.user").get("ledthreshold");
+	}),
+	address: Ember.computed('model.user', function() {
+			return this.get("model.user").get("address");
+	}),
+	city: Ember.computed('model.user', function() {
+			return this.get("model.user").get("city");
+	}),
+	camera: Ember.computed('model.user', function() {
+			return this.get("model.user").get("camera");
+	}),
 
 	actions: {
 		submit: function() {
 				var self = this;
 				if ( this.get("name") == null || this.get("username") == null ||
 				this.get("oldPassword") == null || this.get("password") == null ||
-				this.get("email") == null  || this.get("houseId") == null) {
+				this.get("email") == null  || this.get("houseId") == null ||
+				this.get("tempthreshold") == null || this.get("humidthreshold") == null ||
+				this.get("ledthreshold") == null || this.get("address") == null ||
+				this.get("city") == null || this.get("camera") == null) {
 					this.set("submitFailed", true);
 				} else {
 					if (this.get("oldPassword") == this.get("user").get("password")) {
@@ -77,7 +98,10 @@ export default Ember.Controller.extend({
 								$.ajax({
 										url: postUrl,
 										type: "POST",
-										data: this.getProperties("name", "username","password","email","houseId","roomsStringfy","isAdmin"),
+										data: this.getProperties("name", "username","password",
+										"email","houseId","roomsStringfy","isAdmin","tempthreshold",
+										"humidthreshold","ledthreshold","address","city",
+										"camera"),
 										dataType: 'text',
 										async: true,
 										success: function (response) {

@@ -9,6 +9,12 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
+	private String temp_threshold;
+	private String humid_threshold;
+	private String led_threshold;
+	private String city;
+	private String address;
+	private String camera;
 	private boolean isAdmin;
 	private Room mainRoom;
 	private List<Room> rooms;
@@ -21,6 +27,12 @@ public class User {
 		email = null;
 		isAdmin = false;
 		mainRoom = null;
+		temp_threshold = null;
+		humid_threshold = null;
+		led_threshold = null;
+		city = null;
+		address = null;
+		camera = null;
 		rooms = new ArrayList<Room>();
 	}
 	
@@ -97,6 +109,54 @@ public class User {
 
 	public void setRooms(List<Room> rooms) {
 		this.rooms = rooms;
+	}
+
+	public String getTemp_threshold() {
+		return temp_threshold;
+	}
+
+	public void setTemp_threshold(String temp_threshold) {
+		this.temp_threshold = temp_threshold;
+	}
+
+	public String getHumid_threshold() {
+		return humid_threshold;
+	}
+
+	public void setHumid_threshold(String humid_threshold) {
+		this.humid_threshold = humid_threshold;
+	}
+
+	public String getLed_threshold() {
+		return led_threshold;
+	}
+
+	public void setLed_threshold(String led_threshold) {
+		this.led_threshold = led_threshold;
+	}
+
+	public String getCity() {
+		return city;
+	}
+
+	public void setCity(String city) {
+		this.city = city;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public String getCamera() {
+		return camera;
+	}
+
+	public void setCamera(String camera) {
+		this.camera = camera;
 	}
 	
 }
