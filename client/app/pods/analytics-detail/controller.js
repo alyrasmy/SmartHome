@@ -13,6 +13,45 @@ export default Ember.Controller.extend({
 	forecastConditionsStatus: false,
 	summaryStats:{},
 	homeSenorId: "230046001347343339383037",
+	hasXAxisTitle: true,
+	hasYAxisTitle: true,
+
+	chartAxises: Ember.computed('model', function() {
+		options = {
+		  scales: {
+		    yAxes: [{
+		      scaleLabel: {
+		        display: true,
+		        labelString: 'probability'
+		      }
+		    }]
+		  }
+		}
+		var chart1_xValueDisplayName = "";
+		var chart1_yValueDisplayName = "";
+		var chart2_xValueDisplayName = "";
+		var chart2_yValueDisplayName = "";
+		if(this.get("analyticType") == "Temperature") {
+			chart1_xValueDisplayName = "Time(date)";
+			chart1_yValueDisplayName = "Temperature(Celsius)";
+			chart2_xValueDisplayName = "Temperature(Celsius)";
+			chart2_yValueDisplayName = "Occurence(%)";
+		} else if (this.get("analyticType") == "Humidity") {
+			chart1_xValueDisplayName = "Time(date)";
+			chart1_yValueDisplayName = "Humidity(%)";
+			chart2_xValueDisplayName = "Humidity(%)";
+			chart2_yValueDisplayName = "Occurence(%)";
+		} else if (this.get("analyticType") == "Led") {
+			chart1_xValueDisplayName = "Time(date)";
+			chart1_yValueDisplayName = "LED usage(ms)";
+			chart2_xValueDisplayName = "LED usage(ms)";
+			chart2_yValueDisplayName = "Occurence(%)";
+		}
+		return { "chart1_xValueDisplayName": chart1_xValueDisplayName,
+						"chart1_yValueDisplayName": chart1_yValueDisplayName,
+						"chart2_xValueDisplayName": chart2_xValueDisplayName,
+						"chart2_yValueDisplayName": chart2_yValueDisplayName}
+	}),
 
 	convertUnixTimestamp: function (utc) {
 			var date = new Date(utc*1000);
@@ -88,6 +127,10 @@ export default Ember.Controller.extend({
 			}, 0)/self.get("model.temperatures").slice().length) * 100;
 			temperaturesByOccurence.push({"value":value, "occurence":occurence})
 		})
+
+		temperaturesByOccurence.sort(function(a, b) {
+    return parseFloat(a.value) - parseFloat(b.value);
+		});
 		return temperaturesByOccurence;
 	}),
 
@@ -147,6 +190,10 @@ export default Ember.Controller.extend({
 			}, 0)/self.get("model.humidities").slice().length) * 100;
 			humiditiesByOccurence.push({"value":value, "occurence":occurence})
 		})
+
+		humiditiesByOccurence.sort(function(a, b) {
+		return parseFloat(a.value) - parseFloat(b.value);
+		});
 		return humiditiesByOccurence;
 	}),
 
@@ -203,6 +250,10 @@ export default Ember.Controller.extend({
 			}, 0)/self.get("model.leds").slice().length) * 100 ;
 			ledsByOccurence.push({"value":value, "occurence":occurence})
 		})
+
+		ledsByOccurence.sort(function(a, b) {
+		return parseFloat(a.value) - parseFloat(b.value);
+		});
 		return ledsByOccurence;
 	}),
 

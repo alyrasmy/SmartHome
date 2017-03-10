@@ -10,7 +10,10 @@ export default Ember.Controller.extend({
 	loading: false,
 	requestFailed: false,
 	editMode:false,
-	isAdmin: true,
+
+	isAdmin: Ember.computed('model.user', function() {
+		return this.get("model.user").get("isadmin");
+	}),
 
 	user: Ember.computed('model.user', function() {
 		return this.get("model.user");

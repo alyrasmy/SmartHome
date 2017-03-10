@@ -17,48 +17,81 @@
       {{/if}}
 
       {{#if editMode}}
+          {{#if isAdmin}}
+                  {{paper-input label="Name"  width=80 value=user.name}}
+                  {{paper-input label="Username" width=50  disabled=true value=user.username}}
+                  {{paper-input label="E-mail" value=user.email}}
+                  {{paper-input label="Old Password" type="password" value=oldPassword}}
+                  {{paper-input label="New Password" type="password" value=password}}
+                  {{paper-input label="Address" value=address}}
+                  {{paper-input label="City" value=user.city}}
+                  {{paper-input label="Temperature Threshold" value=user.tempthreshold}}
+                  {{paper-input label="Humidity Threshold" value=user.humidthreshold}}
+                  {{paper-input label="LED Threshold" value=user.ledthreshold}}
+                  {{paper-input label="CameraId" value=user.camera}}
+                  {{paper-input label="House Id" value=houseId}}
+                  {{#each rooms as |room|}}
+                      <div div class="md-actions" layout="row">
+                          <div style='float:left'>
+                              {{paper-input label="Room Name" value=room.name}}
+                          </div>
 
-          {{paper-input label="Name"  width=80 value=user.name}}
-          {{paper-input label="Username" width=50  disabled=true value=user.username}}
-          {{paper-input label="E-mail" value=user.email}}
-          {{paper-input label="Old Password" type="password" value=oldPassword}}
-          {{paper-input label="New Password" type="password" value=password}}
-          {{paper-input label="Address" value=address}}
-          {{paper-input label="City" value=user.city}}
-          {{paper-input label="Temperature Threshold" value=user.tempthreshold}}
-          {{paper-input label="Humidity Threshold" value=user.humidthreshold}}
-          {{paper-input label="LED Threshold" value=user.ledthreshold}}
-          {{paper-input label="CameraId" value=user.camera}}
-          {{paper-input label="House Id" value=houseId}}
-          {{#each rooms as |room|}}
-              <div div class="md-actions" layout="row">
-                  <div style='float:left'>
-                      {{paper-input label="Room Name" value=room.name}}
-                  </div>
+                          <div style='float:right'>
+                              {{paper-input label="Board ID" value=room.id}}
+                          </div>
 
-                  <div style='float:right'>
-                      {{paper-input label="Board ID" value=room.id}}
-                  </div>
+                          <div style='float:right'>
+                              <button type="button" class="btn btn-warning btn-circle"
+                              {{action "removeRoom" room.id}} on="click">
+                                <i class="glyphicon glyphicon-remove"></i><
+                              /button>
+                          </div>
+                      </div>
+                  {{/each}}
+                  {{#paper-button action="addRoom"}}+ Add Room{{/paper-button}}
+                  <BR></BR>
+                  <form class="form-horizontal" {{action "submit" on="submit"}}>
+                      <div style='float:right'>
+                        <button type="submit" class="btn" {{bindAttr disabled="isProcessing"}}>
+                          Submit
+                        </button>
+                          {{#paper-button action="cancel"}}Cancel{{/paper-button}}
+                      </div>
+                  </form>
+          {{else}}
+                  {{paper-input label="Name"  width=80 value=user.name}}
+                  {{paper-input label="Username" width=50  disabled=true value=user.username}}
+                  {{paper-input label="E-mail" value=user.email}}
+                  {{paper-input label="Old Password" type="password" value=oldPassword}}
+                  {{paper-input label="New Password" type="password" value=password}}
+                  {{paper-input label="Address" disabled=true value=address}}
+                  {{paper-input label="City" disabled=true value=user.city}}
+                  {{paper-input label="Temperature Threshold" disabled=true value=user.tempthreshold}}
+                  {{paper-input label="Humidity Threshold" disabled=true value=user.humidthreshold}}
+                  {{paper-input label="LED Threshold" disabled=true value=user.ledthreshold}}
+                  {{paper-input label="CameraId" disabled=true value=user.camera}}
+                  {{paper-input label="House Id" disabled=true value=houseId}}
+                  {{#each rooms as |room|}}
+                      <div div class="md-actions" layout="row">
+                          <div style='float:left'>
+                              {{paper-input label="Room Name" disabled=true value=room.name}}
+                          </div>
 
-                  <div style='float:right'>
-                      <button type="button" class="btn btn-warning btn-circle"
-                      {{action "removeRoom" room.id}} on="click">
-                        <i class="glyphicon glyphicon-remove"></i><
-                      /button>
-                  </div>
-              </div>
-          {{/each}}
-          {{#paper-button action="addRoom"}}+ Add Room{{/paper-button}}
-          <BR></BR>
-          <form class="form-horizontal" {{action "submit" on="submit"}}>
-              <div style='float:right'>
-                <button type="submit" class="btn" {{bindAttr disabled="isProcessing"}}>
-                  Submit
-                </button>
-                  {{#paper-button action="cancel"}}Cancel{{/paper-button}}
-              </div>
-          </form>
-
+                          <div style='float:right'>
+                              {{paper-input label="Board ID" disabled=true value=room.id}}
+                          </div>
+                      </div>
+                  {{/each}}
+                  <BR></BR>
+                  <form class="form-horizontal" {{action "submit" on="submit"}}>
+                      <div style='float:right'>
+                        <button type="submit" class="btn" {{bindAttr disabled="isProcessing"}}>
+                          Submit
+                        </button>
+                          {{#paper-button action="cancel"}}Cancel{{/paper-button}}
+                      </div>
+                  </form>
+          {{/if}}
       {{else}}
 
           {{paper-input label="Name"  width=80 disabled=true value=user.name}}
@@ -87,7 +120,7 @@
           <div style='float:right'>
             {{#paper-button action="editable"}}Edit{{/paper-button}}
           </div>
-      {{/if}}
+    {{/if}}
 
   {{/paper-card-content}}
 {{/paper-card}}

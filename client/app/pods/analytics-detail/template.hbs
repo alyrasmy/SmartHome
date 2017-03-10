@@ -17,10 +17,10 @@
         {{/ez-tab-list}}
         {{#ez-tab-panel-list}}
           {{#ez-tab-panel}}
-              {{ember-chart type='Bar' data=data.day legend=true height=500 width=800}}
+              {{ember-chart type='Bar' data=data.day legend=true height=500 width=800 options=chartAxises.chart1_xValueDisplayName}}
           {{/ez-tab-panel}}
           {{#ez-tab-panel}}
-              {{ember-chart type='line' data=data.occurence legend=true height=500 width=800}}
+              {{ember-chart type='line' data=data.occurence legend=true height=500 width=800 hasXAxisTitle=hasXAxisTitle hasYAxisTitle=hasYAxisTitle xValueDisplayName=chartAxises.chart2_xValueDisplayName yValueDisplayName=chartAxises.chart2_yValueDisplayName}}
           {{/ez-tab-panel}}
         {{/ez-tab-panel-list}}
       {{/ez-tabs}}

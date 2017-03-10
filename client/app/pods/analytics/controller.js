@@ -11,6 +11,15 @@ export default Ember.Controller.extend({
 	temperatureStartDate: new Date(),
 	temperatureEndDate: new Date(),
 
+	hasMainRoomAnalyticsAccess:Ember.computed('model.user', function() {
+		var houseId = this.get("model.user").get("house").slice()[0].get("id");
+		if (houseId == "restricted") {
+			return false;
+		} else {
+			return true;
+		}
+	}),
+
 	rooms: Ember.computed('model.user', function() {
 		return this.get("model.user").get("rooms").slice();
 	}),

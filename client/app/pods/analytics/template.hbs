@@ -4,32 +4,33 @@
           <img src="assets/Logo2.jpg" alt="Logo" style="width:30%;height:30%;">
       </div>
 
-      <h2>House</h2>
-       <BR></BR>
+      {{#if hasMainRoomAnalyticsAccess}}
+              <h2>House</h2>
+               <BR></BR>
+               <p style="margin-left: 40px">
+               <h4>Temperature</h4>
+                    <label>Start Date:{{pikaday-input theme='dark-theme' value=temperatureStartDate onSelection=(action (mut temperatureStartDate)) format='YYYY/MM/DD'}}</label>
+                    <label style="margin-left: 80px" >End Date:{{pikaday-input theme='dark-theme' value=temperatureEndDate onSelection=(action (mut temperatureEndDate)) format='YYYY/MM/DD'}}</label>
+                    <div div class="md-actions" layout="row" layout-align="end center">
+                        <div style='float:left'>
+                          {{#link-to 'analytics-detail' (query-params startDate=temperatureStartDateString endDate=temperatureEndDateString roomId=houseId) invokeAction=(action 'temperatureAnalytics')}} View {{/link-to}}
+                        </div>
+                    </div>
 
-       <p style="margin-left: 40px">
-       <h4>Temperature</h4>
-            <label>Start Date:{{pikaday-input theme='dark-theme' value=temperatureStartDate onSelection=(action (mut temperatureStartDate)) format='YYYY/MM/DD'}}</label>
-            <label style="margin-left: 80px" >End Date:{{pikaday-input theme='dark-theme' value=temperatureEndDate onSelection=(action (mut temperatureEndDate)) format='YYYY/MM/DD'}}</label>
-            <div div class="md-actions" layout="row" layout-align="end center">
-                <div style='float:left'>
-                  {{#link-to 'analytics-detail' (query-params startDate=temperatureStartDateString endDate=temperatureEndDateString roomId=houseId) invokeAction=(action 'temperatureAnalytics')}} View {{/link-to}}
-                </div>
-            </div>
+                <BR></BR>
 
-        <BR></BR>
-
-        <h4>Humidity</h4>
-            <label>Start Date:{{pikaday-input theme='dark-theme' value=humidityStartDate onSelection=(action (mut humidityStartDate)) format='YYYY/MM/DD'}}</label>
-            <label style="margin-left: 80px" >End Date:{{pikaday-input theme='dark-theme' value=humidityEndDate onSelection=(action (mut humidityEndDate)) format='YYYY/MM/DD'}}</label>
-            <div div class="md-actions" layout="row" layout-align="end center">
-              <div style='float:left'>
-                {{#link-to 'analytics-detail' (query-params startDate=humidityStartDateString endDate=humidityEndDateString roomId=houseId) invokeAction=(action 'humidityAnalytics')}} View {{/link-to}}
-              </div>
-            </div>
-        </p>
-       <BR></BR>
-       <BR></BR>
+                <h4>Humidity</h4>
+                    <label>Start Date:{{pikaday-input theme='dark-theme' value=humidityStartDate onSelection=(action (mut humidityStartDate)) format='YYYY/MM/DD'}}</label>
+                    <label style="margin-left: 80px" >End Date:{{pikaday-input theme='dark-theme' value=humidityEndDate onSelection=(action (mut humidityEndDate)) format='YYYY/MM/DD'}}</label>
+                    <div div class="md-actions" layout="row" layout-align="end center">
+                      <div style='float:left'>
+                        {{#link-to 'analytics-detail' (query-params startDate=humidityStartDateString endDate=humidityEndDateString roomId=houseId) invokeAction=(action 'humidityAnalytics')}} View {{/link-to}}
+                      </div>
+                    </div>
+                </p>
+               <BR></BR>
+               <BR></BR>
+        {{/if}}
 
        <h2>Rooms</h2>
        <BR></BR>

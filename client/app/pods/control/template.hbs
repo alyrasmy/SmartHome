@@ -27,12 +27,19 @@
         </div>
         <div style="position: relative;width: 100%;">
           <img src="assets/livingRoom.jpg" style="width:100%;height:1%;border:2px solid black;" onclick={{action "changeLightState"}}>
-          <div style="position: absolute; top: 30%; left: 60%;">
-              <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
-              <div style="font-family: 'Orbitron', sans-serif; color:blue; font-size:200%">Temperature = {{sensorReading.temperature}} C</div>
-          </div>
-          <div style="position: absolute; top: 40%; left: 5%;">
-              <div style="font-family: 'Orbitron', sans-serif; color:blue; font-size:200%">Humidity = {{sensorReading.humidity}}</div>
-          </div>
+          {{#if hasMainRoomAnalyticsAccess}}
+                <div style="position: absolute; top: 30%; left: 60%;">
+                    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+                    <div style="font-family: 'Orbitron', sans-serif; color:blue; font-size:200%">Temperature = {{sensorReading.temperature}} C</div>
+                </div>
+                <div style="position: absolute; top: 40%; left: 5%;">
+                    <div style="font-family: 'Orbitron', sans-serif; color:blue; font-size:200%">Humidity = {{sensorReading.humidity}}</div>
+                </div>
+          {{else}}
+                <div style="position: absolute; top: 30%; left: 30%;">
+                    <link href='https://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+                    <div style="font-family: 'Orbitron', sans-serif; color:red; font-size:200%">Restricted Access to Main Room Control</div>
+                </div>
+          {{/if}}
         </div>
   {{/paper-card}}

@@ -458,12 +458,12 @@ public class JDBCSmartHomeDAO implements SmartHomeDAO{
 							mainRoomId = getRoomIdAndName(connection,user.getMainRoom().getId(),"House",GET_ROOM2_SQL);
 						}
 						userStatement.setInt(6, mainRoomId);
-						userStatement.setString(6, user.getTemp_threshold());
-						userStatement.setString(7, user.getHumid_threshold());
-						userStatement.setString(8, user.getLed_threshold());
-						userStatement.setString(9, user.getCity());
-						userStatement.setString(10, user.getAddress());
-						userStatement.setString(11, user.getCamera());
+						userStatement.setString(7, user.getTemp_threshold());
+						userStatement.setString(8, user.getHumid_threshold());
+						userStatement.setString(9, user.getLed_threshold());
+						userStatement.setString(10, user.getCity());
+						userStatement.setString(11, user.getAddress());
+						userStatement.setString(12, user.getCamera());
 						userStatement.execute();
 					}
 					

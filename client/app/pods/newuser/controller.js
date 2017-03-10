@@ -55,7 +55,7 @@ export default Ember.Controller.extend({
 						if(this.get("hasAccessToHome")) {
 								this.get("houseId");
 						} else {
-							this.set("houseId","")
+							this.set("houseId","restricted")
 						}
 
 						this.get("userRooms").forEach(function(room) {

@@ -6,6 +6,14 @@ export default Ember.Controller.extend({
     temperature:null,
     humidity:null,
 
+    hasMainRoomAnalyticsAccess:Ember.computed('model.user', function() {
+  		var houseId = this.get("model.user").get("house").slice()[0].get("id");
+  		if (houseId == "restricted") {
+  			return false;
+  		} else {
+  			return true;
+  		}
+  	}),
 
     userRooms: Ember.computed('model.user', function() {
   		var rooms = this.get("model.user").get("rooms");
