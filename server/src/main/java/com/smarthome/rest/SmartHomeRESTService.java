@@ -345,8 +345,8 @@ public class SmartHomeRESTService {
 	public Response addUser(@FormParam("isAdmin") boolean isAdmin, @FormParam("name") String name
 			, @FormParam("username") String username, @FormParam("password") String password
 			, @FormParam("email") String email, @FormParam("houseId") String houseId
-			, @FormParam("roomsStringfy") String roomsStringfy, @FormParam("temp_threshold") String temp_threshold
-			, @FormParam("humid_threshold") String humid_threshold, @FormParam("led_threshold") String led_threshold
+			, @FormParam("roomsStringfy") String roomsStringfy, @FormParam("tempthreshold") String temp_threshold
+			, @FormParam("humidthreshold") String humid_threshold, @FormParam("ledthreshold") String led_threshold
 			, @FormParam("city") String city, @FormParam("address") String address
 			, @FormParam("camera") String camera) {
 
