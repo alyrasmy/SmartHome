@@ -17,7 +17,7 @@ export default Ember.Controller.extend({
 	hasYAxisTitle: true,
 
 	chartAxises: Ember.computed('model', function() {
-		options = {
+		var options = {
 		  scales: {
 		    yAxes: [{
 		      scaleLabel: {
