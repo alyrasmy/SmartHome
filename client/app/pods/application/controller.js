@@ -61,7 +61,6 @@ export default Ember.Controller.extend({
 	actions: {
 		transitionTo: function(e) {
 			if(e.route == "logout") {
-				this.set('session.isAuthenticated', false);
 				window.location.reload(true);
 			}
 			if(e.route == "profile") {

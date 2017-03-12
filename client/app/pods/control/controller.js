@@ -79,11 +79,14 @@ export default Ember.Controller.extend({
             $.ajax({
                 url: 'https://api.particle.io/v1/devices/' + room.id + '/led?access_token=04b90f278a1415636513f0f71fe9f89e92cdfcba',
                 type: "POST",
-                data: '{"args":"' + args + '"}',
+                data: 'args=' + args,
                 async: false,
                 success: function (response) {
                   if(response.return_value == 1) {
-                    room.set("bulbOn",!room.get("bulbOn"));
+                    room.set("bulbOn",true);
+                  }
+                  if(response.return_value == 0) {
+                    room.set("bulbOn",false);
                   }
                 }
             });
