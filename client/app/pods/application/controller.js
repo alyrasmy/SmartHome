@@ -62,6 +62,7 @@ export default Ember.Controller.extend({
 		transitionTo: function(e) {
 			if(e.route == "logout") {
 				this.set('session.isAuthenticated', false);
+				window.location.reload(true);
 			}
 			if(e.route == "profile") {
 				this.transitionToRoute('profile', {queryParams: {username: this.get("username")}});
