@@ -17,10 +17,10 @@
         {{/ez-tab-list}}
         {{#ez-tab-panel-list}}
           {{#ez-tab-panel}}
-              {{ember-chart type='Bar' data=data.day legend=true height=500 width=800 options=chartAxises.chart1_xValueDisplayName}}
+              {{ember-chart type='Bar' data=data.day height=500 width=800 options=chartAxises.chart1_xValueDisplayName}}
           {{/ez-tab-panel}}
           {{#ez-tab-panel}}
-              {{ember-chart type='line' data=data.occurence legend=true height=500 width=800 hasXAxisTitle=hasXAxisTitle hasYAxisTitle=hasYAxisTitle xValueDisplayName=chartAxises.chart2_xValueDisplayName yValueDisplayName=chartAxises.chart2_yValueDisplayName}}
+              {{ember-chart type='line' data=data.occurence height=500 width=800 hasXAxisTitle=hasXAxisTitle hasYAxisTitle=hasYAxisTitle xValueDisplayName=chartAxises.chart2_xValueDisplayName yValueDisplayName=chartAxises.chart2_yValueDisplayName}}
           {{/ez-tab-panel}}
         {{/ez-tab-panel-list}}
       {{/ez-tabs}}
@@ -70,8 +70,6 @@
                            <p>Humidity: {{currentConditions.humidity}} %</p>
                            <p>Temp_min: {{currentConditions.temp_min}} Celsius</p>
                            <p>Temp_max: {{currentConditions.temp_max}} Celsius</p>
-                           <p>Sea Level: {{currentConditions.sea_level}} hPa</p>
-                           <p>Ground Level: {{currentConditions.grnd_level}} hPa</p>
                            <p>Wind: {{currentConditions.windSpeed}} meter/sec {{currentConditions.windDirection}} degrees</p>
                            <p>Sunrise time: {{currentConditions.sunrise}}</p>
                            <p>Sunset time: {{currentConditions.sunset}}</p>

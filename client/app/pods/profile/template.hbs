@@ -39,13 +39,6 @@
                           <div style='float:right'>
                               {{paper-input label="Board ID" value=room.id}}
                           </div>
-
-                          <div style='float:right'>
-                              <button type="button" class="btn btn-warning btn-circle"
-                              {{action "removeRoom" room.id}} on="click">
-                                <i class="glyphicon glyphicon-remove"></i><
-                              /button>
-                          </div>
                       </div>
                   {{/each}}
                   {{#paper-button action="addRoom"}}+ Add Room{{/paper-button}}

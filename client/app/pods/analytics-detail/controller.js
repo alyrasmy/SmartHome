@@ -24,7 +24,13 @@ export default Ember.Controller.extend({
 		        display: true,
 		        labelString: 'probability'
 		      }
-		    }]
+		    }],
+				yAxes: [{
+					scaleLabel: {
+						display: true,
+						labelString: 'probability'
+					}
+				}]
 		  }
 		}
 		var chart1_xValueDisplayName = "";
@@ -47,7 +53,7 @@ export default Ember.Controller.extend({
 			chart2_xValueDisplayName = "LED usage(ms)";
 			chart2_yValueDisplayName = "Occurence(%)";
 		}
-		return { "chart1_xValueDisplayName": chart1_xValueDisplayName,
+		return { "chart1_xValueDisplayName": options,
 						"chart1_yValueDisplayName": chart1_yValueDisplayName,
 						"chart2_xValueDisplayName": chart2_xValueDisplayName,
 						"chart2_yValueDisplayName": chart2_yValueDisplayName}
@@ -344,11 +350,11 @@ export default Ember.Controller.extend({
 						var currentConditions = {};
 						currentConditions.description = response.weather[0].description;
 						currentConditions.icon = 'assets/' + response.weather[0].icon + '.png';
-						currentConditions.temperature = response.main.temp.toFixed(2) - 273;
+						currentConditions.temperature = (response.main.temp - 273).toFixed(2);
 						currentConditions.pressure = response.main.pressure;
 						currentConditions.humidity = response.main.humidity;
-						currentConditions.temp_min = response.main.temp_min.toFixed(2) - 273;
-						currentConditions.temp_max = response.main.temp_max.toFixed(2) - 273;
+						currentConditions.temp_min = (response.main.temp_min - 273).toFixed(2);
+						currentConditions.temp_max = (response.main.temp_max - 273).toFixed(2);
 						currentConditions.sea_level = response.main.sea_level;
 						currentConditions.grnd_level = response.main.grnd_level;
 						currentConditions.windSpeed = response.wind.speed;
@@ -423,11 +429,11 @@ export default Ember.Controller.extend({
 							condition.date = forecast.dt_txt;
 							condition.description = forecast.weather[0].description;
 							condition.icon = 'assets/' + forecast.weather[0].icon + '.png';
-							condition.temperature = forecast.main.temp.toFixed(2) - 273;
+							condition.temperature = (forecast.main.temp - 273).toFixed(2);
 							condition.pressure = forecast.main.pressure;
 							condition.humidity = forecast.main.humidity;
-							condition.temp_min = forecast.main.temp_min.toFixed(2) - 273;
-							condition.temp_max = forecast.main.temp_max.toFixed(2) - 273;
+							condition.temp_min = (forecast.main.temp_min - 273).toFixed(2);
+							condition.temp_max = (forecast.main.temp_max - 273).toFixed(2);
 							condition.sea_level = forecast.main.sea_level;
 							condition.grnd_level = forecast.main.grnd_level;
 							condition.windSpeed = forecast.wind.speed;
