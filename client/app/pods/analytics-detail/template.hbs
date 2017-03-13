@@ -34,10 +34,18 @@
           {{getSummaryStats}}
           <h4>Summary</h4>
           <BR></BR>
-          <p>Current Reading: {{summaryStats.current}}</p>
-          <p>Average Reading: {{summaryStats.avg}}</p>
-          <p>Max Reading: {{summaryStats.max}}</p>
-          <p>Min Reading: {{summaryStats.min}}</p>
+          {{#if isLEDAnalytics}}
+              <p>Current Usage: {{summaryStats.current}} sec</p>
+              <p>Average Usage: {{summaryStats.avg}} sec</p>
+              <p>Max Usage: {{summaryStats.max}} sec</p>
+              <p>Min Usage: {{summaryStats.min}} sec</p>
+              <p>Total Usage Cost: {{summaryStats.totalPowerUsage}} x {{summaryStats.price}} = {{summaryStats.totalCost}}</p>
+          {{else}}
+              <p>Current Reading: {{summaryStats.current}}</p>
+              <p>Average Reading: {{summaryStats.avg}}</p>
+              <p>Max Reading: {{summaryStats.max}}</p>
+              <p>Min Reading: {{summaryStats.min}}</p>
+          {{/if}}
         </div>
         <div style='float:right;margin-left: 150px"'>
           <img src="assets/summary.jpg" alt="Logo">

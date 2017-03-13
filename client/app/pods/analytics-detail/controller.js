@@ -16,6 +16,13 @@ export default Ember.Controller.extend({
 	hasXAxisTitle: true,
 	hasYAxisTitle: true,
 
+	isLEDAnalytics:  Ember.computed('model', function() {
+		if (this.get("analyticType") == "Led") {
+			return true;
+		}
+		return false;
+	)},
+
 	chartAxises: Ember.computed('model', function() {
 		var options = {
 		  scales: {
@@ -396,6 +403,12 @@ export default Ember.Controller.extend({
 			return sum + Number(reading.get('value'));
 		}, 0)/analyticReadings.length;
 
+		var totalTimeUsage = analyticReadings.reduce(function(sum, reading) {
+			return sum + Number(reading.get('value'));
+		}, 0);
+
+		var totalPowerUsage = ((totalTimeUsage/(60*60)) * 120) /1000; //120 mW/h
+
 		$.ajax({
 				url: 'https://api.particle.io/v1/devices/' + deviceId + '/' + analytic + '?access_token=04b90f278a1415636513f0f71fe9f89e92cdfcba',
 				type: "GET",
@@ -406,6 +419,9 @@ export default Ember.Controller.extend({
 						summaryStats.avg = average.toFixed(2);
 						summaryStats.max = high.toFixed(2);
 						summaryStats.min = low.toFixed(2);
+						summaryStats.totalPowerUsage = totalPowerUsage + " mW";
+						summaryStats.price = "$0.11(mWh)";
+						summaryStats.totalCost = "$" + (totalPowerUsage * 0.11);
 						self.set("summaryStats",summaryStats)
 				}
 		});
