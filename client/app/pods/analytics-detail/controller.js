@@ -21,7 +21,7 @@ export default Ember.Controller.extend({
 			return true;
 		}
 		return false;
-	)},
+	}),
 
 	chartAxises: Ember.computed('model', function() {
 		var options = {
