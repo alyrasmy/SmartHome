@@ -454,7 +454,7 @@ export default Ember.Controller.extend({
 							condition.grnd_level = forecast.main.grnd_level;
 							condition.windSpeed = forecast.wind.speed;
 							condition.windDirection = forecast.wind.deg;
-							if(forecast.dt_txt.split(' ')[1] == "21:00:00") {
+							if(forecast.dt_txt.split(' ')[1] == "00:00:00") {
 								var date = new Date(forecast.dt_txt.split(' ')[0]);
 								condition.date = date.toDateString().split(' ')[0]
 																+ ' ' + date.toDateString().split(' ')[1]
